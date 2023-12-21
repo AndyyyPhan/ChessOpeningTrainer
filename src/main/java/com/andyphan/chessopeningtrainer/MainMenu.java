@@ -28,6 +28,10 @@ public class MainMenu extends Scene {
         loginLayout.setAlignment(Pos.CENTER);
         loginLayout.getChildren().addAll(mainMenuLabel, practiceButton, manageOpeningsButton, logoutButton);
 
+        manageOpeningsButton.setOnAction(e -> {
+            SceneManager.setScene(new ManageOpeningsMenu(database.getPlayer(player.getUsername())));
+        });
+
         logoutButton.setOnAction(e -> {
             SceneManager.setScene(new Login());
             PlayerManager.setCurrentPlayer(null);
