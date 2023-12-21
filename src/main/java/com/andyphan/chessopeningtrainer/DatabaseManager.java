@@ -51,4 +51,10 @@ public class DatabaseManager {
             }
         }
     }
+
+    public Player getPlayer(String username) {
+        return session.createQuery("FROM Player WHERE username =:username", Player.class)
+                .setParameter("username", username)
+                .uniqueResult();
+    }
 }
