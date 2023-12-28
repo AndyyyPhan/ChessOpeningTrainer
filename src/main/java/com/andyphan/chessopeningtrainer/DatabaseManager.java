@@ -2,6 +2,10 @@ package com.andyphan.chessopeningtrainer;
 
 import jakarta.persistence.PersistenceException;
 import org.hibernate.*;
+import org.hibernate.query.Query;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
 public class DatabaseManager {
@@ -44,11 +48,8 @@ public class DatabaseManager {
             player.setPassword(password);
             session.persist(player);
             session.getTransaction().commit();
-        }
-        catch (PersistenceException e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
+        } catch (PersistenceException e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
         }
     }
 
@@ -56,5 +57,19 @@ public class DatabaseManager {
         return session.createQuery("FROM Player WHERE username =:username", Player.class)
                 .setParameter("username", username)
                 .uniqueResult();
+    }
+
+    public List<ChessOpening> getAllChessOpenings() {
+        List<ChessOpening> chessOpenings = Collections.emptyList();
+        session.beginTransaction();
+        try {
+            Query<ChessOpening> query = session.createQuery("FROM ChessOpening", ChessOpening.class);
+            chessOpenings = query.getResultList();
+            session.getTransaction().commit();
+        }
+        catch (Exception e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+        }
+        return chessOpenings;
     }
 }
