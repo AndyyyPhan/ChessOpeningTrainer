@@ -12,6 +12,7 @@
         <property name="hibernate.jdbc.use_get_generated_keys">false</property>
 
         <mapping class="com.andyphan.chessopeningtrainer.Player" />
+        <mapping class="com.andyphan.chessopeningtrainer.ChessOpening" />
 
     </session-factory>
 </hibernate-configuration>
