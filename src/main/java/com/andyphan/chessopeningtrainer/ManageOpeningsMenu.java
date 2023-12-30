@@ -35,6 +35,8 @@ public class ManageOpeningsMenu extends Scene {
         allOpeningsButton.setFont(new Font(12));
         HBox allOpeningsContainer = new HBox(5, allOpeningsLabel, allOpeningsButton);
 
+        allOpeningsButton.setOnAction(e -> SceneManager.setScene(new AllOpenings()));
+
         ListView<ChessOpening> table = new ListView<>();
         ObservableList<ChessOpening> chessOpenings = FXCollections.observableArrayList();
         chessOpenings.addAll(database.getAllChessOpenings());
