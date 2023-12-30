@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class ManageOpeningsMenu extends Scene {
     private DatabaseManager database;
@@ -35,7 +37,13 @@ public class ManageOpeningsMenu extends Scene {
         allOpeningsButton.setFont(new Font(12));
         HBox allOpeningsContainer = new HBox(5, allOpeningsLabel, allOpeningsButton);
 
-        allOpeningsButton.setOnAction(e -> SceneManager.setScene(new AllOpenings()));
+        allOpeningsButton.setOnAction(e -> {
+            Stage allOpeningsStage = new Stage();
+            allOpeningsStage.initModality(Modality.WINDOW_MODAL);
+            allOpeningsStage.initOwner(SceneManager.getPrimaryStage());
+            allOpeningsStage.setScene(new AllOpenings());
+            allOpeningsStage.show();
+        });
 
         ListView<ChessOpening> table = new ListView<>();
         ObservableList<ChessOpening> chessOpenings = FXCollections.observableArrayList();
