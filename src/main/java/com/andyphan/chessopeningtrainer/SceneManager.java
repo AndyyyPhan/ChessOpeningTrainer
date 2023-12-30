@@ -13,4 +13,7 @@ public class SceneManager {
     public static void setScene(Scene scene) {
         primaryStage.setScene(scene);
     }
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
 }
