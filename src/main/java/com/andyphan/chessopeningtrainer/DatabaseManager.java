@@ -59,7 +59,7 @@ public class DatabaseManager {
                 .uniqueResult();
     }
 
-    public List<ChessOpening> getAllChessOpenings() {
+    public List<ChessOpening> getOpeningsInPractice() {
         List<ChessOpening> chessOpenings = Collections.emptyList();
         session.beginTransaction();
         try {
