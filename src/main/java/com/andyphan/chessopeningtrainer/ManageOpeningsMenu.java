@@ -41,13 +41,13 @@ public class ManageOpeningsMenu extends Scene {
             Stage allOpeningsStage = new Stage();
             allOpeningsStage.initModality(Modality.WINDOW_MODAL);
             allOpeningsStage.initOwner(SceneManager.getPrimaryStage());
-            allOpeningsStage.setScene(new AllOpenings());
+            allOpeningsStage.setScene(new AllOpeningsMenu());
             allOpeningsStage.show();
         });
 
         ListView<ChessOpening> table = new ListView<>();
         ObservableList<ChessOpening> chessOpenings = FXCollections.observableArrayList();
-        chessOpenings.addAll(database.getAllChessOpenings());
+        chessOpenings.addAll(database.getOpeningsInPractice());
 
         table.setItems(chessOpenings);
 
