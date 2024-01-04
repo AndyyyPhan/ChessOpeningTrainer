@@ -7,12 +7,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Pagination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ManageOpeningsMenu extends Scene {
     private DatabaseManager database;
@@ -41,7 +44,11 @@ public class ManageOpeningsMenu extends Scene {
             Stage allOpeningsStage = new Stage();
             allOpeningsStage.initModality(Modality.WINDOW_MODAL);
             allOpeningsStage.initOwner(SceneManager.getPrimaryStage());
-            allOpeningsStage.setScene(new AllOpeningsMenu());
+            try {
+                allOpeningsStage.setScene(new AllOpeningsMenu());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             allOpeningsStage.show();
         });
 
