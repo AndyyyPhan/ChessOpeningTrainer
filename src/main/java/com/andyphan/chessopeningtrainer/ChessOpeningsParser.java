@@ -21,13 +21,24 @@ public class ChessOpeningsParser {
         }
         return stringBuilder.toString();
     }
-    public ArrayList<String> getAllChessOpeningNames() throws IOException {
+    public ArrayList<ChessOpening> getAllChessOpenings() throws IOException {
         JSONArray jsonArray = new JSONArray(getJSONText());
-        ArrayList<String> allChestOpeningNames = new ArrayList<>();
+        ArrayList<ChessOpening> allChessOpenings = new ArrayList<>();
         for (int i=0; i<jsonArray.length(); i++) {
+            ChessOpening chessOpening = new ChessOpening();
             JSONObject jsonChessOpening = jsonArray.getJSONObject(i);
-            allChestOpeningNames.add(jsonChessOpening.getString("name"));
+            chessOpening.setName(jsonChessOpening.getString("name"));
+            chessOpening.setFen(jsonChessOpening.getString("fen"));
+            chessOpening.setMoves(jsonChessOpening.getString("moves"));
+            allChessOpenings.add(chessOpening);
         }
-        return allChestOpeningNames;
+        return allChessOpenings;
+    }
+    public ArrayList<String> getAllChessOpeningNames() throws IOException {
+        ArrayList<String> allChessOpeningNames = new ArrayList<>();
+        for (ChessOpening chessOpening : getAllChessOpenings()) {
+            allChessOpeningNames.add(chessOpening.getName());
+        }
+        return allChessOpeningNames;
     }
 }
