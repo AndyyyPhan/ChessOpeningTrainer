@@ -1,5 +1,6 @@
 package com.andyphan.chessopeningtrainer;
 
+import com.andyphan.chess.ChessScene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -12,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -34,7 +37,6 @@ public class AllOpeningsMenu extends Scene {
 
         Pagination pagination = new Pagination(getPageCount(), 0);
         pagination.setPageFactory(this::createPage);
-
 
         VBox layout = (VBox) getRoot();
         layout.getChildren().addAll(mainLabelContainer, pagination);
@@ -67,6 +69,17 @@ public class AllOpeningsMenu extends Scene {
                 };
             }
         });
+
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Stage chessStage = new Stage();
+                chessStage.initModality(Modality.WINDOW_MODAL);
+                chessStage.initOwner(SceneManager.getPrimaryStage());
+                chessStage.setScene(new ChessScene(listView.getSelectionModel().getSelectedItem()));
+                chessStage.show();
+            }
+        });
+
         return listView;
     }
 }
