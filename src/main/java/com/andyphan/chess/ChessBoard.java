@@ -7,15 +7,25 @@ import javafx.scene.shape.Rectangle;
 public class ChessBoard extends GridPane {
     protected static final int TILE_SIZE = 80;
     protected static final int BOARD_SIZE = 8;
+    private boolean isFlipped = false;
 
     public ChessBoard() {
         drawBoard();
     }
 
-    private void drawBoard() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                drawSquare(row, col, (row+col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
+    protected void drawBoard() {
+        if (isFlipped) {
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                for (int col = 0; col < BOARD_SIZE; col++) {
+                    drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(123, 124, 124) : Color.rgb(215, 215, 215));
+                }
+            }
+        }
+        else {
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                for (int col = 0; col < BOARD_SIZE; col++) {
+                    drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
+                }
             }
         }
     }
@@ -24,5 +34,13 @@ public class ChessBoard extends GridPane {
         Rectangle square = new Rectangle(TILE_SIZE, TILE_SIZE);
         square.setFill(color);
         add(square, col, row);
+    }
+
+    protected void setFlipped(boolean flipped) {
+        isFlipped = flipped;
+    }
+
+    protected boolean getFlipped() {
+        return isFlipped;
     }
 }
