@@ -3,6 +3,7 @@ package com.andyphan.chess;
 import com.andyphan.chess.pieces.*;
 import com.andyphan.chessopeningtrainer.ChessOpening;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 import static com.andyphan.chess.ChessBoard.BOARD_SIZE;
@@ -19,8 +20,11 @@ public class ChessScene extends Scene {
 
         chessBoard.setOnMouseClicked(event -> handleMouseClick((int) event.getX()/ TILE_SIZE, (int) event.getY() / TILE_SIZE));
 
+        Button flipBoardButton = new Button("Flip Board");
+        flipBoardButton.setOnAction(event -> flipBoard());
+
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(chessBoard);
+        layout.getChildren().addAll(chessBoard, flipBoardButton);
     }
 
     private void handleMouseClick(int clickedCol, int clickedRow) {
@@ -63,30 +67,58 @@ public class ChessScene extends Scene {
     }
 
     private void initializePieces() {
-        for (int col = 0; col < BOARD_SIZE; col++) {
-            addPiece("whitePawn.png", col, 6);
-            addPiece("blackPawn.png", col, 1);
+        if (!chessBoard.getFlipped()) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                addPiece("whitePawn.png", col, 6);
+                addPiece("blackPawn.png", col, 1);
+            }
+            addPiece("whiteKnight.png", 1, 7);
+            addPiece("whiteKnight.png", 6, 7);
+            addPiece("blackKnight.png", 1, 0);
+            addPiece("blackKnight.png", 6, 0);
+
+            addPiece("whiteBishop.png", 2, 7);
+            addPiece("whiteBishop.png", 5, 7);
+            addPiece("blackBishop.png", 2, 0);
+            addPiece("blackBishop.png", 5, 0);
+
+            addPiece("whiteRook.png", 0, 7);
+            addPiece("whiteRook.png", 7, 7);
+            addPiece("blackRook.png", 0, 0);
+            addPiece("blackRook.png", 7, 0);
+
+            addPiece("whiteQueen.png", 3, 7);
+            addPiece("blackQueen.png", 3, 0);
+
+            addPiece("whiteKing.png", 4, 7);
+            addPiece("blackKing.png", 4, 0);
         }
-        addPiece("whiteKnight.png", 1, 7);
-        addPiece("whiteKnight.png", 6, 7);
-        addPiece("blackKnight.png", 1, 0);
-        addPiece("blackKnight.png", 6, 0);
+        else {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                addPiece("whitePawn.png", col, 1);
+                addPiece("blackPawn.png", col, 6);
+            }
+            addPiece("whiteKnight.png", 1, 0);
+            addPiece("whiteKnight.png", 6, 0);
+            addPiece("blackKnight.png", 1, 7);
+            addPiece("blackKnight.png", 6, 7);
 
-        addPiece("whiteBishop.png", 2, 7);
-        addPiece("whiteBishop.png", 5, 7);
-        addPiece("blackBishop.png", 2, 0);
-        addPiece("blackBishop.png", 5, 0);
+            addPiece("whiteBishop.png", 2, 0);
+            addPiece("whiteBishop.png", 5, 0);
+            addPiece("blackBishop.png", 2, 7);
+            addPiece("blackBishop.png", 5, 7);
 
-        addPiece("whiteRook.png", 0, 7);
-        addPiece("whiteRook.png", 7, 7);
-        addPiece("blackRook.png", 0, 0);
-        addPiece("blackRook.png", 7, 0);
+            addPiece("whiteRook.png", 0, 0);
+            addPiece("whiteRook.png", 7, 0);
+            addPiece("blackRook.png", 0, 7);
+            addPiece("blackRook.png", 7, 7);
 
-        addPiece("whiteQueen.png", 3, 7);
-        addPiece("blackQueen.png", 3, 0);
+            addPiece("whiteQueen.png", 4, 0);
+            addPiece("blackQueen.png", 4, 7);
 
-        addPiece("whiteKing.png", 4, 7);
-        addPiece("blackKing.png", 4, 0);
+            addPiece("whiteKing.png", 3, 0);
+            addPiece("blackKing.png", 3, 7);
+        }
     }
 
     private String getChessMove(ChessPiece chessPiece, int col, int row) {
@@ -104,14 +136,38 @@ public class ChessScene extends Scene {
         else if (col == 5) stringBuilder.append("f");
         else if (col == 6) stringBuilder.append("g");
         else if (col == 7) stringBuilder.append("h");
-        if (row == 0) stringBuilder.append(8);
-        else if (row == 1) stringBuilder.append(7);
-        else if (row == 2) stringBuilder.append(6);
-        else if (row == 3) stringBuilder.append(5);
-        else if (row == 4) stringBuilder.append(4);
-        else if (row == 5) stringBuilder.append(3);
-        else if (row == 6) stringBuilder.append(2);
-        else if (row == 7) stringBuilder.append(1);
+        if (!chessBoard.getFlipped()) {
+            if (row == 0) stringBuilder.append(8);
+            else if (row == 1) stringBuilder.append(7);
+            else if (row == 2) stringBuilder.append(6);
+            else if (row == 3) stringBuilder.append(5);
+            else if (row == 4) stringBuilder.append(4);
+            else if (row == 5) stringBuilder.append(3);
+            else if (row == 6) stringBuilder.append(2);
+            else if (row == 7) stringBuilder.append(1);
+        }
+        else {
+            if (row == 0) stringBuilder.append(1);
+            else if (row == 1) stringBuilder.append(2);
+            else if (row == 2) stringBuilder.append(3);
+            else if (row == 3) stringBuilder.append(4);
+            else if (row == 4) stringBuilder.append(5);
+            else if (row == 5) stringBuilder.append(6);
+            else if (row == 6) stringBuilder.append(7);
+            else if (row == 7) stringBuilder.append(8);
+        }
         return stringBuilder.toString();
+    }
+
+    private void flipBoard() {
+        chessBoard.getChildren().clear();
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                pieceViews[row][col] = null;
+            }
+        }
+        chessBoard.setFlipped(!chessBoard.getFlipped());
+        chessBoard.drawBoard();
+        initializePieces();
     }
 }
