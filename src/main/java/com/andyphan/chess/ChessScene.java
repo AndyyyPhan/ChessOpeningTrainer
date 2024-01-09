@@ -15,7 +15,7 @@ public class ChessScene extends Scene {
     private int selectedPieceRow = -1;
     private int selectedPieceColumn = -1;
     public ChessScene(ChessOpening chessOpening) {
-        super(new VBox(10), BOARD_SIZE*TILE_SIZE, BOARD_SIZE*TILE_SIZE);
+        super(new VBox(10), BOARD_SIZE*TILE_SIZE+50, BOARD_SIZE*TILE_SIZE+100);
         initializePieces();
 
         chessBoard.setOnMouseClicked(event -> handleMouseClick((int) event.getX()/ TILE_SIZE, (int) event.getY() / TILE_SIZE));
@@ -128,15 +128,15 @@ public class ChessScene extends Scene {
         else if (chessPiece.getClass() == Rook.class) stringBuilder.append("R");
         else if (chessPiece.getClass() == Queen.class) stringBuilder.append("Q");
         else if (chessPiece.getClass() == King.class) stringBuilder.append("K");
-        if (col == 0) stringBuilder.append("a");
-        else if (col == 1) stringBuilder.append("b");
-        else if (col == 2) stringBuilder.append("c");
-        else if (col == 3) stringBuilder.append("d");
-        else if (col == 4) stringBuilder.append("e");
-        else if (col == 5) stringBuilder.append("f");
-        else if (col == 6) stringBuilder.append("g");
-        else if (col == 7) stringBuilder.append("h");
         if (!chessBoard.getFlipped()) {
+            if (col == 0) stringBuilder.append("a");
+            else if (col == 1) stringBuilder.append("b");
+            else if (col == 2) stringBuilder.append("c");
+            else if (col == 3) stringBuilder.append("d");
+            else if (col == 4) stringBuilder.append("e");
+            else if (col == 5) stringBuilder.append("f");
+            else if (col == 6) stringBuilder.append("g");
+            else if (col == 7) stringBuilder.append("h");
             if (row == 0) stringBuilder.append(8);
             else if (row == 1) stringBuilder.append(7);
             else if (row == 2) stringBuilder.append(6);
@@ -147,6 +147,14 @@ public class ChessScene extends Scene {
             else if (row == 7) stringBuilder.append(1);
         }
         else {
+            if (col == 0) stringBuilder.append("h");
+            else if (col == 1) stringBuilder.append("g");
+            else if (col == 2) stringBuilder.append("f");
+            else if (col == 3) stringBuilder.append("e");
+            else if (col == 4) stringBuilder.append("d");
+            else if (col == 5) stringBuilder.append("c");
+            else if (col == 6) stringBuilder.append("b");
+            else if (col == 7) stringBuilder.append("a");
             if (row == 0) stringBuilder.append(1);
             else if (row == 1) stringBuilder.append(2);
             else if (row == 2) stringBuilder.append(3);
