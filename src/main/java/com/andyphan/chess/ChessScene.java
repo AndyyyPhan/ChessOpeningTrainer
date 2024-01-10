@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+
 import static com.andyphan.chess.ChessBoard.BOARD_SIZE;
 import static com.andyphan.chess.ChessBoard.TILE_SIZE;
 
@@ -43,15 +45,18 @@ public class ChessScene extends Scene {
             selectedPieceRow = row;
             selectedPieceColumn = col;
         }
+        System.out.println(selectedPiece.getCandidateMoves());
     }
 
     private void movePiece(int targetCol, int targetRow) {
-        if (pieceViews[selectedPieceRow][selectedPieceColumn] != pieceViews[targetRow][targetCol]) {
-            ChessPiece selectedPiece = pieceViews[selectedPieceRow][selectedPieceColumn];
+        ChessPiece selectedPiece = pieceViews[selectedPieceRow][selectedPieceColumn];
+        if (selectedPiece != pieceViews[targetRow][targetCol] && isValidMove(selectedPiece, targetCol, targetRow)) {
             chessBoard.getChildren().remove(selectedPiece);
             pieceViews[selectedPieceRow][selectedPieceColumn] = null;
             pieceViews[targetRow][targetCol] = selectedPiece;
             chessBoard.add(selectedPiece, targetCol, targetRow);
+            selectedPiece.setCol(targetCol);
+            selectedPiece.setRow(targetRow);
             playerMove.setNextMove();
             System.out.println(getChessMove(selectedPiece, targetCol, targetRow));
         }
@@ -67,6 +72,8 @@ public class ChessScene extends Scene {
         else if (imageName.contains("Queen")) pieceViews[row][col] = new Queen(imageName);
         else if (imageName.contains("King")) pieceViews[row][col] = new King(imageName);
         chessBoard.add(pieceViews[row][col], col, row);
+        pieceViews[row][col].setRow(row);
+        pieceViews[row][col].setCol(col);
     }
 
     private void initializePieces() {
@@ -180,5 +187,21 @@ public class ChessScene extends Scene {
         chessBoard.setFlipped(!chessBoard.getFlipped());
         chessBoard.drawBoard();
         initializePieces();
+        playerMove.setCurrentMove(Alliance.WHITE);
+    }
+
+    private boolean isValidMove(ChessPiece chessPiece, int targetCol, int targetRow) {
+        ArrayList<PieceMoves> candidateMoves = chessPiece.getCandidateMoves();
+        if (chessPiece.getClass() == Pawn.class) {
+            if (chessPiece.getAlliance() == Alliance.WHITE) {
+                if (candidateMoves.contains(PieceMoves.DOUBLE_MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() - 2) return true;
+                else return candidateMoves.contains(PieceMoves.MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() - 1;
+            }
+            else if (chessPiece.getAlliance() == Alliance.BLACK) {
+                if (candidateMoves.contains(PieceMoves.DOUBLE_MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() + 2) return true;
+                else return candidateMoves.contains(PieceMoves.MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() + 1;
+            }
+        }
+        return false;
     }
 }
