@@ -14,6 +14,7 @@ public class ChessScene extends Scene {
     protected ChessPiece[][] pieceViews = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
     private int selectedPieceRow = -1;
     private int selectedPieceColumn = -1;
+    private final Move playerMove = new Move();
     public ChessScene(ChessOpening chessOpening) {
         super(new VBox(10), BOARD_SIZE*TILE_SIZE+50, BOARD_SIZE*TILE_SIZE+100);
         initializePieces();
@@ -38,20 +39,22 @@ public class ChessScene extends Scene {
 
     private void selectPiece(int col, int row) {
         ChessPiece selectedPiece = pieceViews[row][col];
-        if (selectedPiece != null) {
+        if (selectedPiece != null && playerMove.getCurrentMove() == selectedPiece.getAlliance()) {
             selectedPieceRow = row;
             selectedPieceColumn = col;
         }
     }
 
     private void movePiece(int targetCol, int targetRow) {
-        ChessPiece selectedPiece = pieceViews[selectedPieceRow][selectedPieceColumn];
-        chessBoard.getChildren().remove(selectedPiece);
-        pieceViews[selectedPieceRow][selectedPieceColumn] = null;
-        pieceViews[targetRow][targetCol] = selectedPiece;
-        chessBoard.add(selectedPiece, targetCol, targetRow);
-        System.out.println(getChessMove(selectedPiece, targetCol, targetRow));
-
+        if (pieceViews[selectedPieceRow][selectedPieceColumn] != pieceViews[targetRow][targetCol]) {
+            ChessPiece selectedPiece = pieceViews[selectedPieceRow][selectedPieceColumn];
+            chessBoard.getChildren().remove(selectedPiece);
+            pieceViews[selectedPieceRow][selectedPieceColumn] = null;
+            pieceViews[targetRow][targetCol] = selectedPiece;
+            chessBoard.add(selectedPiece, targetCol, targetRow);
+            playerMove.setNextMove();
+            System.out.println(getChessMove(selectedPiece, targetCol, targetRow));
+        }
         selectedPieceRow = -1;
         selectedPieceColumn = -1;
     }
