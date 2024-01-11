@@ -8,8 +8,7 @@ import java.util.Objects;
 
 public class ChessPiece extends ImageView {
     private Alliance alliance;
-    private int row;
-    private int col;
+    private Tile tile;
     private ArrayList<PieceMoves> candidateMoves = new ArrayList<>();
     public ChessPiece(String imageName) {
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pieces/" + imageName)));
@@ -27,20 +26,11 @@ public class ChessPiece extends ImageView {
         return alliance;
     }
 
-    public int getRow() {
-        return row;
+    public Tile getTile() {
+        return tile;
     }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
+    public void setTile(Tile tile) {
+        this.tile = tile;
     }
 
     public ArrayList<PieceMoves> getCandidateMoves() {
