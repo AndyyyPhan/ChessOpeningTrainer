@@ -71,4 +71,17 @@ public class Tile {
     public String getTileName() {
         return tileName;
     }
+    public void setRowAndCol(int row, int col) {
+        this.row = row;
+        this.col = col;
+        translateToTile(row, col);
+    }
+
+    public void setEqualToTile(Tile tile) {
+        this.chessPiece = tile.chessPiece;
+        this.occupied = tile.occupied;
+        this.tileName = tile.tileName;
+        this.row = tile.row;
+        this.col = tile.col;
+    }
 }
