@@ -85,6 +85,16 @@ public class ChessBoard extends GridPane {
     public Tile[][] getChessGrid() {
         return chessGrid;
     }
+    public void setChessGrid(Tile[][] chessGrid) {
+        int rows = chessGrid.length;
+        int cols = chessGrid[0].length;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                this.chessGrid[row][col].setEqualToTile(chessGrid[7-row][7-col]);
+            }
+        }
+    }
     public Tile getChessGridTile(int row, int col) {
         for (Tile[] tileArray : chessGrid) {
             for (Tile tile : tileArray) {
