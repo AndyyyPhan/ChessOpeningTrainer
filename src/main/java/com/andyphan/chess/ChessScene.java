@@ -4,6 +4,7 @@ import com.andyphan.chess.pieces.*;
 import com.andyphan.chessopeningtrainer.ChessOpening;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -17,10 +18,16 @@ public class ChessScene extends Scene {
     private Tile selectedTile = new Tile(-1, -1);
     private final Move playerMove = new Move();
     public ChessScene(ChessOpening chessOpening) {
-        super(new VBox(10), BOARD_SIZE*TILE_SIZE+50, BOARD_SIZE*TILE_SIZE+100);
+        super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
         initializePieces();
 
-        chessBoard.setOnMouseClicked(event -> handleMouseClick((int) event.getX()/ TILE_SIZE, (int) event.getY() / TILE_SIZE));
+        chessBoard.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                resetSelectedTile();
+            }
+            handleMouseClick((int) event.getX() / TILE_SIZE, (int) event.getY() / TILE_SIZE);
+
+        });
 
         Button flipBoardButton = new Button("Flip Board");
         flipBoardButton.setOnAction(event -> flipBoard());
@@ -135,6 +142,12 @@ public class ChessScene extends Scene {
         chessBoard.drawBoard();
         chessBoard.setChessGrid(chessGridCopy);
         setupPieces();
+        resetSelectedTile();
+    }
+    private void resetSelectedTile() {
+        selectedTile.setChessPiece(null);
+        selectedTile.setRowAndCol(-1, -1);
+        selectedTile.setOccupied(false);
     }
 
 //    private boolean isValidMove(ChessPiece chessPiece, int targetCol, int targetRow) {
