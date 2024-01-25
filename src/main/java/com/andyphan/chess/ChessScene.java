@@ -16,6 +16,7 @@ public class ChessScene extends Scene {
     private final ChessBoard chessBoard = new ChessBoard();
     protected Tile[][] chessGrid = chessBoard.getChessGrid();
     private Tile selectedTile = new Tile(-1, -1);
+    private Tile targetTile = new Tile(-1, -1);
     private final Move playerMove = new Move();
     public ChessScene(ChessOpening chessOpening) {
         super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
@@ -23,7 +24,7 @@ public class ChessScene extends Scene {
 
         chessBoard.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                resetSelectedTile();
+                selectedTile.resetTile();
             }
             handleMouseClick((int) event.getX() / TILE_SIZE, (int) event.getY() / TILE_SIZE);
 
@@ -51,24 +52,25 @@ public class ChessScene extends Scene {
             selectedTile.setRowAndCol(chessGrid[row][col].getRow(), chessGrid[row][col].getCol());
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
         }
-//        System.out.println(selectedPiece.getCandidateMoves());
         System.out.println(getChessMove(selectedTile));
     }
 
     private void movePiece(int targetCol, int targetRow) {
         ChessPiece selectedPiece = selectedTile.getChessPiece();
+        targetTile.setEqualToTile(chessGrid[targetRow][targetCol]);
+        selectedPiece.setTargetTile(targetTile);
         if (selectedPiece != chessGrid[targetRow][targetCol].getChessPiece()) {
-//        if (selectedPiece != chessGrid[targetRow][targetCol].getChessPiece() && isValidMove(selectedPiece, targetCol, targetRow)) {
-            chessBoard.getChildren().remove(selectedPiece);
-            chessBoard.getChessGridTile(selectedTile.getRow(), selectedTile.getCol()).setChessPiece(null); //should it be selectedTile.getRow() ??
-            selectedTile.setChessPiece(null);
-            selectedTile.setOccupied(false);
-            chessGrid[targetRow][targetCol].setChessPiece(selectedPiece);
-            chessBoard.add(selectedPiece, targetCol, targetRow);
-            selectedPiece.setTile(chessGrid[targetRow][targetCol]);
-            playerMove.setNextMove();
-            System.out.println(getChessMove(chessGrid[targetRow][targetCol]));
+            if (selectedPiece != chessGrid[targetRow][targetCol].getChessPiece() && isValidMove(selectedPiece, targetTile)) {
+                chessBoard.getChildren().remove(selectedPiece);
+                chessBoard.getChessGridTile(selectedTile.getRow(), selectedTile.getCol()).setChessPiece(null);
+                selectedTile.resetTile();
+                chessGrid[targetRow][targetCol].setChessPiece(selectedPiece);
+                chessBoard.add(selectedPiece, targetCol, targetRow);
+                selectedPiece.setTile(chessGrid[targetRow][targetCol]);
+                playerMove.setNextMove();
+            }
         }
+        System.out.println(getChessMove(selectedPiece.getTile()));
         selectedTile.setRowAndCol(-1, -1);
     }
 
@@ -142,26 +144,38 @@ public class ChessScene extends Scene {
         chessBoard.drawBoard();
         chessBoard.setChessGrid(chessGridCopy);
         setupPieces();
-        resetSelectedTile();
+        selectedTile.resetTile();
     }
-    private void resetSelectedTile() {
-        selectedTile.setChessPiece(null);
-        selectedTile.setRowAndCol(-1, -1);
-        selectedTile.setOccupied(false);
-    }
-
-//    private boolean isValidMove(ChessPiece chessPiece, int targetCol, int targetRow) {
-//        ArrayList<PieceMoves> candidateMoves = chessPiece.getCandidateMoves();
-//        if (chessPiece.getClass() == Pawn.class) {
-//            if (chessPiece.getAlliance() == Alliance.WHITE) {
-//                if (candidateMoves.contains(PieceMoves.DOUBLE_MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() - 2) return true;
-//                else return candidateMoves.contains(PieceMoves.MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() - 1;
-//            }
-//            else if (chessPiece.getAlliance() == Alliance.BLACK) {
-//                if (candidateMoves.contains(PieceMoves.DOUBLE_MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() + 2) return true;
-//                else return candidateMoves.contains(PieceMoves.MOVE) && targetCol == chessPiece.getCol() && targetRow == chessPiece.getRow() + 1;
-//            }
-//        }
-//        return false;
+//    private void resetSelectedTile() {
+//        selectedTile.setChessPiece(null);
+//        selectedTile.setRowAndCol(-1, -1);
+//        selectedTile.setOccupied(false);
 //    }
+
+    private boolean isValidMove(ChessPiece chessPiece, Tile targetTile) {
+        ArrayList<PieceMoves> candidateMoves = chessPiece.getCandidateMoves();
+        if (chessPiece.getClass() == Pawn.class) {
+            if (chessPiece.getAlliance() == Alliance.WHITE) {
+                if (candidateMoves.contains(PieceMoves.MOVE) && !candidateMoves.contains(PieceMoves.DOUBLE_MOVE)) {
+                    return targetTile.getChessPiece() == null && targetTile.getRow() == chessPiece.getRow() - 1;
+                }
+                else if (candidateMoves.contains(PieceMoves.DOUBLE_MOVE)) {
+                    return chessGrid[chessPiece.getRow()-1][chessPiece.getCol()].getChessPiece() == null &&
+                            targetTile.getChessPiece() == null && (targetTile.getRow() == chessPiece.getRow() - 1 ||
+                            targetTile.getRow() == chessPiece.getRow() - 2);
+                }
+            }
+            else if (chessPiece.getAlliance() == Alliance.BLACK) {
+                if (candidateMoves.contains(PieceMoves.MOVE) && !candidateMoves.contains(PieceMoves.DOUBLE_MOVE)) {
+                    return targetTile.getChessPiece() == null && targetTile.getRow() == chessPiece.getRow() + 1;
+                }
+                else if (candidateMoves.contains(PieceMoves.DOUBLE_MOVE)) {
+                    return chessGrid[chessPiece.getRow()+1][chessPiece.getCol()].getChessPiece() == null &&
+                            targetTile.getChessPiece() == null && (targetTile.getRow() == chessPiece.getRow() + 1 ||
+                            targetTile.getRow() == chessPiece.getRow() + 2);
+                }
+            }
+        }
+        return false;
+    }
 }

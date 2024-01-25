@@ -16,10 +16,14 @@ public class Pawn extends ChessPiece {
     @Override
     public ArrayList<PieceMoves> getCandidateMoves() {
         candidateMoves.clear();
-        if ((getAlliance() == Alliance.WHITE && getRow() == 6) || (getAlliance() == Alliance.BLACK && getRow() == 1))
-            Collections.addAll(candidateMoves, PieceMoves.DOUBLE_MOVE, PieceMoves.MOVE);
-        else if ((getAlliance() == Alliance.WHITE && getRow() != 6) || (getAlliance() == Alliance.BLACK && getRow() != 1))
-            candidateMoves.add(PieceMoves.MOVE);
+        if (getAlliance() == Alliance.WHITE && getCol() == getTargetTile().getCol()) {
+            if (getRow() == 6) Collections.addAll(candidateMoves, PieceMoves.DOUBLE_MOVE, PieceMoves.MOVE);
+            else candidateMoves.add(PieceMoves.MOVE);
+        }
+        else if (getAlliance() == Alliance.BLACK && getCol() == getTargetTile().getCol()){
+            if (getRow() == 1) Collections.addAll(candidateMoves, PieceMoves.DOUBLE_MOVE, PieceMoves.MOVE);
+            else candidateMoves.add(PieceMoves.MOVE);
+        }
         return candidateMoves;
     }
 }
