@@ -84,4 +84,12 @@ public class Tile {
         this.row = tile.row;
         this.col = tile.col;
     }
+
+    public void resetTile() {
+        this.chessPiece = null;
+        this.occupied = false;
+        this.row = -1;
+        this.col = -1;
+        this.tileName = null;
+    }
 }
