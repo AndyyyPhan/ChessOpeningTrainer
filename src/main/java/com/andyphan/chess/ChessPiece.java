@@ -3,14 +3,11 @@ package com.andyphan.chess;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class ChessPiece extends ImageView {
     private Alliance alliance;
     private Tile tile;
-    private Tile targetTile;
-    private ArrayList<PieceMoves> candidateMoves = new ArrayList<>();
     public ChessPiece(String imageName) {
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pieces/" + imageName)));
         setFitHeight(ChessBoard.TILE_SIZE);
@@ -34,23 +31,11 @@ public class ChessPiece extends ImageView {
         this.tile = tile;
     }
 
-    public Tile getTargetTile() {
-        return targetTile;
-    }
-
-    public void setTargetTile(Tile targetTile) {
-        this.targetTile = targetTile;
-    }
-
     public int getRow() {
         return tile.getRow();
     }
 
     public int getCol() {
         return tile.getCol();
-    }
-
-    public ArrayList<PieceMoves> getCandidateMoves() {
-        return null;
     }
 }
