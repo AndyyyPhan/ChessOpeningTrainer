@@ -152,6 +152,7 @@ public class ChessScene extends Scene {
 
     private boolean isValidMove(ChessPiece chessPiece, Tile targetTile) {
         if (chessPiece.getClass() == Pawn.class) return isPawnMoveValid(chessPiece, targetTile);
+        else if (chessPiece.getClass() == Knight.class) return isKnightMoveValid(chessPiece, targetTile);
         return false;
     }
 
@@ -173,5 +174,12 @@ public class ChessScene extends Scene {
                             (targetTile.getRow() == chessPiece.getRow() + 1) && targetTile.getChessPiece() != null);
         }
         return false;
+    }
+
+    private boolean isKnightMoveValid(ChessPiece chessPiece, Tile targetTile) {
+        return (((targetTile.getCol() == chessPiece.getCol() - 1 || targetTile.getCol() == chessPiece.getCol() + 1) &&
+                (targetTile.getRow() == chessPiece.getRow() - 2 || targetTile.getRow() == chessPiece.getRow() + 2)) ||
+                ((targetTile.getCol() == chessPiece.getCol() - 2 || targetTile.getCol() == chessPiece.getCol() + 2) &&
+                        (targetTile.getRow() == chessPiece.getRow() - 1 || targetTile.getRow() == chessPiece.getRow() + 1)));
     }
 }
