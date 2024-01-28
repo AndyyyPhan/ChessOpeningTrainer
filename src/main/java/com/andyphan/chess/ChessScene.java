@@ -2,10 +2,13 @@ package com.andyphan.chess;
 
 import com.andyphan.chess.pieces.*;
 import com.andyphan.chessopeningtrainer.ChessOpening;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.util.Objects;
 
@@ -20,7 +23,8 @@ public class ChessScene extends Scene {
     private Tile targetTile = new Tile(-1, -1);
     private int selectedRow;
     private int selectedCol;
-    private final Move playerMove = new Move();
+    private final Turn playerTurn = new Turn();
+    private Move move;
     public ChessScene(ChessOpening chessOpening) {
         super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
         initializePieces();
@@ -36,8 +40,12 @@ public class ChessScene extends Scene {
         Button flipBoardButton = new Button("Flip Board");
         flipBoardButton.setOnAction(event -> flipBoard());
 
+        move = new Move(chessOpening);
+        Button nextMoveButton = new Button("Next move");
+        nextMoveButton.setOnAction(event -> displayNextMove());
+
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(chessBoard, flipBoardButton);
+        layout.getChildren().addAll(chessBoard, flipBoardButton, nextMoveButton);
     }
 
     private void handleMouseClick(int clickedCol, int clickedRow) {
@@ -51,7 +59,7 @@ public class ChessScene extends Scene {
 
     private void selectPiece(int col, int row) {
         ChessPiece selectedPiece = chessGrid[row][col].getChessPiece();
-        if (selectedPiece != null && playerMove.getCurrentMove() == selectedPiece.getAlliance()) {
+        if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(chessGrid[row][col].getRow(), chessGrid[row][col].getCol());
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
             selectedRow = row;
@@ -71,7 +79,7 @@ public class ChessScene extends Scene {
             chessGrid[targetRow][targetCol].setChessPiece(selectedPiece);
             chessBoard.add(selectedPiece, targetCol, targetRow);
             selectedPiece.setTile(chessGrid[targetRow][targetCol]);
-            playerMove.setNextMove();
+            playerTurn.setNextTurn();
         }
         selectedTile.setRowAndCol(-1, -1);
     }
@@ -272,5 +280,71 @@ public class ChessScene extends Scene {
                         chessPiece.getRow() + 1 == targetTile.getRow() || chessPiece.getRow() - 1 == targetTile.getRow())) ||
                 (chessPiece.getRow() - 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol())
                 || (chessPiece.getRow() + 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol());
+    }
+
+    private void displayNextMove() {
+//        for (int i=0; i<move.getAllMovesInList().length; i++) {
+//            String movePair = move.getAllMovesInList()[i].trim();
+//            String[] individualMove = movePair.split(" ");
+//            for (String move : individualMove) {
+//                playMove(move);
+//            }
+//        }
+
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(1);
+        Duration moveDuration = Duration.seconds(1);
+
+        for (int i = 0; i < move.getAllMovesInList().length; i++) {
+            String movePair = move.getAllMovesInList()[i].trim();
+            String[] individualMove = movePair.split(" ");
+
+            for (int j = 0; j < individualMove.length; j++) {
+                int finalJ = j;
+                KeyFrame keyFrame = new KeyFrame(
+                        moveDuration.multiply(i+1).add(moveDuration.multiply(finalJ)),
+                        event -> playMove(individualMove[finalJ])
+                );
+
+                timeline.getKeyFrames().add(keyFrame);
+            }
+        }
+
+        timeline.play();
+//        playMove(move.getAllMovesInList()[0].trim().split(" ")[0]);
+//        System.out.println(Arrays.toString(move.getAllMovesInList()));
+//        System.out.println(move.getAllMovesInList()[3].trim());
+    }
+
+    private void playMove(String move) {
+        Tile moveTile = new Tile(move);
+        moveTile = chessBoard.getChessGridTileByName(moveTile.getRow(), moveTile.getCol());
+        Tile movingTile = new Tile(-1, -1);
+        if (move.length() == 2) {
+            for (int row=0; row<BOARD_SIZE; row++) {
+                if (chessBoard.getChessGridTileByName(row, moveTile.getCol()).getChessPiece() != null) {
+                    if (chessBoard.getChessGridTileByName(row, moveTile.getCol()).getChessPiece().getClass() == Pawn.class &&
+                            chessBoard.getChessGridTileByName(row, moveTile.getCol()).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
+                            && isPawnMoveValid(chessBoard.getChessGridTileByName(row, moveTile.getCol()).getChessPiece(), moveTile))
+                        movingTile = chessBoard.getChessGridTileByName(row, moveTile.getCol());
+                }
+            }
+        }
+        else {
+            if (move.contains("N")) {
+                for (int row=0; row<BOARD_SIZE; row++) {
+                    for (int col=0; col<BOARD_SIZE; col++) {
+                        if (chessBoard.getChessGridTileByName(row, col).getChessPiece() != null) {
+                            if (chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Knight.class &&
+                            chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
+                            && isKnightMoveValid(chessBoard.getChessGridTileByName(row, col).getChessPiece(), moveTile))
+                                movingTile = chessBoard.getChessGridTileByName(row, col);
+                        }
+                    }
+                }
+            }
+        }
+        selectPiece(movingTile.getCol(), movingTile.getRow());
+        movePiece(moveTile.getCol(), moveTile.getRow());
     }
 }
