@@ -1,19 +1,35 @@
 package com.andyphan.chess;
 
+import com.andyphan.chessopeningtrainer.ChessOpening;
+
 public class Move {
-    private Alliance currentMove = Alliance.WHITE;
-    private Alliance nextMove = Alliance.BLACK;
-    public Alliance getCurrentMove() {
+    private ChessOpening chessOpening;
+    private String currentMove;
+    private int moveNumber = 1;
+
+    public Move(ChessOpening chessOpening) {
+        this.chessOpening = chessOpening;
+    }
+    public String getCurrentMove() {
         return currentMove;
     }
-    public void setNextMove() {
-        Alliance temp = currentMove;
-        currentMove = nextMove;
-        nextMove = temp;
+
+    public void setCurrentMove(String currentMove) {
+        this.currentMove = currentMove;
     }
-    public void setCurrentMove(Alliance alliance) {
-        currentMove = alliance;
-        if (alliance == Alliance.WHITE) nextMove = Alliance.BLACK;
-        else nextMove = Alliance.WHITE;
+
+    public String getAllMoves() {
+        return chessOpening.getMoves();
+    }
+
+    public String[] getAllMovesInList() {
+        String[] allMoves = getAllMoves().split("[0-9]+. ");
+        String[] refactoredAllMoves = new String[allMoves.length-1];
+        System.arraycopy(allMoves, 1, refactoredAllMoves, 0, allMoves.length-1);
+        return refactoredAllMoves;
+    }
+
+    public Tile translateToTile() {
+        return new Tile(currentMove);
     }
 }
