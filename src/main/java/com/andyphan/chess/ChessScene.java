@@ -150,12 +150,15 @@ public class ChessScene extends Scene {
     }
 
     private boolean isValidMove(ChessPiece chessPiece, Tile targetTile) {
-        if (targetTile.getChessPiece() != null && targetTile.getChessPiece().getAlliance() == chessPiece.getAlliance()) return false;
+        if (targetTile.getChessPiece() != null)
+            if (targetTile.getChessPiece().getClass() == King.class ||
+                    targetTile.getChessPiece().getAlliance() == chessPiece.getAlliance()) return false;
         if (chessPiece.getClass() == Pawn.class) return isPawnMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Knight.class) return isKnightMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Bishop.class) return isBishopMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Rook.class) return isRookMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Queen.class) return isQueenMoveValid(chessPiece, targetTile);
+        else if (chessPiece.getClass() == King.class) return isKingMoveValid(chessPiece, targetTile);
         return false;
     }
 
@@ -260,5 +263,14 @@ public class ChessScene extends Scene {
 
     private boolean isQueenMoveValid(ChessPiece chessPiece, Tile targetTile) {
         return isBishopMoveValid(chessPiece, targetTile) || isRookMoveValid(chessPiece, targetTile);
+    }
+
+    private boolean isKingMoveValid(ChessPiece chessPiece, Tile targetTile) {
+        return (chessPiece.getCol() + 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
+                chessPiece.getRow() + 1 == targetTile.getRow() || chessPiece.getRow() - 1 == targetTile.getRow())) ||
+                (chessPiece.getCol() - 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
+                        chessPiece.getRow() + 1 == targetTile.getRow() || chessPiece.getRow() - 1 == targetTile.getRow())) ||
+                (chessPiece.getRow() - 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol())
+                || (chessPiece.getRow() + 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol());
     }
 }
