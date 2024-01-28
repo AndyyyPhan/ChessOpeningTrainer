@@ -10,6 +10,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static com.andyphan.chess.ChessBoard.BOARD_SIZE;
@@ -41,11 +43,11 @@ public class ChessScene extends Scene {
         flipBoardButton.setOnAction(event -> flipBoard());
 
         move = new Move(chessOpening);
-        Button nextMoveButton = new Button("Next move");
-        nextMoveButton.setOnAction(event -> displayNextMove());
+        Button showAllMoves = new Button("Show All Moves");
+        showAllMoves.setOnAction(event -> displayAllMoves());
 
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(chessBoard, flipBoardButton, nextMoveButton);
+        layout.getChildren().addAll(chessBoard, flipBoardButton, showAllMoves);
     }
 
     private void handleMouseClick(int clickedCol, int clickedRow) {
@@ -282,38 +284,28 @@ public class ChessScene extends Scene {
                 || (chessPiece.getRow() + 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol());
     }
 
-    private void displayNextMove() {
-//        for (int i=0; i<move.getAllMovesInList().length; i++) {
-//            String movePair = move.getAllMovesInList()[i].trim();
-//            String[] individualMove = movePair.split(" ");
-//            for (String move : individualMove) {
-//                playMove(move);
-//            }
-//        }
-
+    private void displayAllMoves() {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         Duration moveDuration = Duration.seconds(1);
+        ArrayList<String> singleMove = new ArrayList<>();
 
         for (int i = 0; i < move.getAllMovesInList().length; i++) {
             String movePair = move.getAllMovesInList()[i].trim();
             String[] individualMove = movePair.split(" ");
 
-            for (int j = 0; j < individualMove.length; j++) {
-                int finalJ = j;
-                KeyFrame keyFrame = new KeyFrame(
-                        moveDuration.multiply(i+1).add(moveDuration.multiply(finalJ)),
-                        event -> playMove(individualMove[finalJ])
-                );
-
-                timeline.getKeyFrames().add(keyFrame);
-            }
+            singleMove.addAll(Arrays.asList(individualMove));
+        }
+        for (int i=0; i < singleMove.size(); i++) {
+            int finalI = i;
+            KeyFrame keyFrame = new KeyFrame(
+                    moveDuration.multiply(i),
+                    event -> playMove(singleMove.get(finalI))
+            );
+            timeline.getKeyFrames().add(keyFrame);
         }
 
         timeline.play();
-//        playMove(move.getAllMovesInList()[0].trim().split(" ")[0]);
-//        System.out.println(Arrays.toString(move.getAllMovesInList()));
-//        System.out.println(move.getAllMovesInList()[3].trim());
     }
 
     private void playMove(String move) {
