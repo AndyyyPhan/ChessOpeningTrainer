@@ -1,5 +1,7 @@
 package com.andyphan.chess;
 
+import com.andyphan.chess.pieces.*;
+
 import java.util.HashMap;
 
 public class Tile {
@@ -32,9 +34,10 @@ public class Tile {
         columns.put('f', 5);
         columns.put('g', 6);
         columns.put('h', 7);
+        if (tileName.length() > 2) tileName = tileName.substring(1, 2);
         Character letter = tileName.charAt(0);
         col = columns.get(letter);
-        row = 8 - tileName.charAt(1);
+        row = 8-Integer.parseInt(String.valueOf(tileName.charAt(1)));
     }
 
     private void translateToTile(int row, int col) {
@@ -49,6 +52,16 @@ public class Tile {
         columns.put(7, 'h');
         tileName = String.valueOf(columns.get(col)) +
                 (8 - row);
+    }
+
+    public String getTilenameWithPiece() {
+        if (chessPiece == null) return getTileName();
+        if (chessPiece.getClass() == Knight.class) return "N" + getTileName();
+        if (chessPiece.getClass() == Bishop.class) return "B" + getTileName();
+        if (chessPiece.getClass() == Rook.class) return "R" + getTileName();
+        if (chessPiece.getClass() == Queen.class) return "Q" + getTileName();
+        if (chessPiece.getClass() == King.class) return "K" + getTileName();
+        return getTileName();
     }
 
     public void setChessPiece(ChessPiece chessPiece) {
