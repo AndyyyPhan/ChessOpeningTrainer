@@ -34,9 +34,7 @@ public class Tile {
         columns.put('f', 5);
         columns.put('g', 6);
         columns.put('h', 7);
-        System.out.println(tileName);
         if (tileName.length() > 2) tileName = tileName.substring(1);
-        System.out.println(tileName);
         Character letter = tileName.charAt(0);
         col = columns.get(letter);
         row = 8-Integer.parseInt(String.valueOf(tileName.charAt(1)));
