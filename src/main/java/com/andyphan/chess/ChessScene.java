@@ -154,6 +154,7 @@ public class ChessScene extends Scene {
         if (chessPiece.getClass() == Pawn.class) return isPawnMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Knight.class) return isKnightMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Bishop.class) return isBishopMoveValid(chessPiece, targetTile);
+        else if (chessPiece.getClass() == Rook.class) return isRookMoveValid(chessPiece, targetTile);
         return false;
     }
 
@@ -218,6 +219,40 @@ public class ChessScene extends Scene {
                 }
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean isRookMoveValid(ChessPiece chessPiece, Tile targetTile) {
+        if (chessPiece.getRow() != targetTile.getRow() && chessPiece.getCol() != targetTile.getCol()) return false;
+        Tile currentTile = chessPiece.getTile();
+        if (targetTile.getCol() > chessPiece.getCol()) {
+            while (currentTile.getCol() < targetTile.getCol() - 1 && currentTile.getCol() < BOARD_SIZE) {
+                currentTile = chessBoard.getChessGridTileByName(currentTile.getRow(), currentTile.getCol()+1);
+                if (currentTile.getChessPiece() != null) return false;
+            }
+            return true;
+        }
+        else if (targetTile.getCol() < chessPiece.getCol()) {
+            while (currentTile.getCol() > targetTile.getCol() + 1 && currentTile.getCol() > 0) {
+                currentTile = chessBoard.getChessGridTileByName(currentTile.getRow(), currentTile.getCol()-1);
+                if (currentTile.getChessPiece() != null) return false;
+            }
+            return true;
+        }
+        else if (targetTile.getRow() > chessPiece.getRow()) {
+            while (currentTile.getRow() < targetTile.getRow() - 1 && currentTile.getRow() < BOARD_SIZE) {
+                currentTile = chessBoard.getChessGridTileByName(currentTile.getRow()+1, currentTile.getCol());
+                if (currentTile.getChessPiece() != null) return false;
+            }
+            return true;
+        }
+        else if (targetTile.getRow() < chessPiece.getRow()) {
+            while (currentTile.getRow() > targetTile.getRow() + 1 && currentTile.getRow() > 0) {
+                currentTile = chessBoard.getChessGridTileByName(currentTile.getRow()-1, currentTile.getCol());
+                if (currentTile.getChessPiece() != null) return false;
+            }
+            return true;
         }
         return false;
     }
