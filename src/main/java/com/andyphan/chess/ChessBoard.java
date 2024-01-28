@@ -103,4 +103,14 @@ public class ChessBoard extends GridPane {
         }
         return null;
     }
+
+    public Tile getChessGridTileByName(int row, int col) {
+        Tile givenTile = new Tile(row, col);
+        for (Tile[] tileArray : chessGrid) {
+            for (Tile tile : tileArray) {
+                if (givenTile.getTileName().equals(tile.getTileName())) return tile;
+            }
+        }
+        return null;
+    }
 }
