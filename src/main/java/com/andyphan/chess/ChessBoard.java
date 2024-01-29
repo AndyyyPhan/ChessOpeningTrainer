@@ -22,7 +22,7 @@ public class ChessBoard extends GridPane {
         if (isFlipped) {
             for (int row = 0; row < BOARD_SIZE; row++) {
                 for (int col = 0; col < BOARD_SIZE; col++) {
-                    drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(123, 124, 124) : Color.rgb(215, 215, 215));
+                    drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
                     chessGrid[row][col] = new Tile(7-row, 7-col);
 
                     Text colLabel = new Text(String.valueOf((char) ('h' - col)));
