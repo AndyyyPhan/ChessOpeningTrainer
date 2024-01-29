@@ -276,6 +276,13 @@ public class ChessScene extends Scene {
     }
 
     private boolean isKingMoveValid(ChessPiece chessPiece, Tile targetTile) {
+        if (chessPiece.getAlliance() == Alliance.WHITE) {
+            if (!((King) chessPiece).getHasMoved() && targetTile.getChessPiece() != null) {
+                if (targetTile.getChessPiece().getClass() == Rook.class && !((Rook) targetTile.getChessPiece()).getHasMoved()) {
+                    return true;
+                }
+            }
+        }
         return (chessPiece.getCol() + 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
                 chessPiece.getRow() + 1 == targetTile.getRow() || chessPiece.getRow() - 1 == targetTile.getRow())) ||
                 (chessPiece.getCol() - 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
