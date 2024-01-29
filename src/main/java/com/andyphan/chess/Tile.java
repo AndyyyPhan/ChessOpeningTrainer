@@ -34,10 +34,30 @@ public class Tile {
         columns.put('f', 5);
         columns.put('g', 6);
         columns.put('h', 7);
-        if (tileName.length() > 2) tileName = tileName.substring(1);
-        Character letter = tileName.charAt(0);
-        col = columns.get(letter);
-        row = 8-Integer.parseInt(String.valueOf(tileName.charAt(1)));
+        if (!tileName.contains("x")) {
+            if (tileName.length() > 2) tileName = tileName.substring(1);
+            Character letter = tileName.charAt(0);
+            col = columns.get(letter);
+            row = 8 - Integer.parseInt(String.valueOf(tileName.charAt(1)));
+        }
+        else {
+            Character letter = tileName.charAt(0);
+            col = columns.get(letter);
+            row = 0;
+        }
+    }
+
+    public int translateColToNumber(Character letter) {
+        HashMap<Character, Integer> columns = new HashMap<>();
+        columns.put('a', 0);
+        columns.put('b', 1);
+        columns.put('c', 2);
+        columns.put('d', 3);
+        columns.put('e', 4);
+        columns.put('f', 5);
+        columns.put('g', 6);
+        columns.put('h', 7);
+        return columns.get(letter);
     }
 
     private void translateToTile(int row, int col) {
