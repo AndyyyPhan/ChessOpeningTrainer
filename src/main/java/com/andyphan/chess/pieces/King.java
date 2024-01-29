@@ -4,6 +4,8 @@ import com.andyphan.chess.ChessPiece;
 
 public class King extends ChessPiece {
     private boolean hasMoved = false;
+    private boolean castling = false;
+
     public King(String imagePath) {
         super(imagePath);
     }
@@ -14,5 +16,13 @@ public class King extends ChessPiece {
 
     public boolean getHasMoved() {
         return hasMoved;
+    }
+
+    public boolean isCastling() {
+        return castling;
+    }
+
+    public void setCastling(boolean castling) {
+        this.castling = castling;
     }
 }
