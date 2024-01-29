@@ -76,10 +76,46 @@ public class ChessScene extends Scene {
         if (selectedPiece != chessGrid[targetRow][targetCol].getChessPiece() && isValidMove(selectedPiece, targetTile)) {
             if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling()) {
                 if (targetTile.getTileName().equals("a1")) {
-
+                    chessBoard.getChildren().remove(selectedPiece);
+                    chessBoard.getChildren().remove(targetTile.getChessPiece());
+                    chessGrid[selectedRow][selectedCol].setChessPiece(null);
+                    chessGrid[targetRow][targetCol].setChessPiece(null);
+                    if (!chessBoard.getFlipped()) {
+                        chessGrid[7][2].setChessPiece(selectedPiece);
+                        chessGrid[7][3].setChessPiece(targetTile.getChessPiece());
+                        chessBoard.add(selectedPiece, 2, targetRow);
+                        chessBoard.add(targetTile.getChessPiece(), 3, targetRow);
+                    }
+                    else {
+                        chessGrid[0][5].setChessPiece(selectedPiece);
+                        chessGrid[0][4].setChessPiece(targetTile.getChessPiece());
+                        chessBoard.add(selectedPiece, 5, targetRow);
+                        chessBoard.add(targetTile.getChessPiece(), 4, targetRow);
+                    }
+                    selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 2));
+                    targetTile.getChessPiece().setTile(chessBoard.getChessGridTileByName(7, 3));
+                    playerTurn.setNextTurn();
                 }
                 else if (targetTile.getTileName().equals("h1")) {
-
+                    chessBoard.getChildren().remove(selectedPiece);
+                    chessBoard.getChildren().remove(targetTile.getChessPiece());
+                    chessGrid[selectedRow][selectedCol].setChessPiece(null);
+                    chessGrid[targetRow][targetCol].setChessPiece(null);
+                    if (!chessBoard.getFlipped()) {
+                        chessGrid[7][6].setChessPiece(selectedPiece);
+                        chessGrid[7][5].setChessPiece(targetTile.getChessPiece());
+                        chessBoard.add(selectedPiece, 6, targetRow);
+                        chessBoard.add(targetTile.getChessPiece(), 5, targetRow);
+                    }
+                    else {
+                        chessGrid[0][1].setChessPiece(selectedPiece);
+                        chessGrid[0][2].setChessPiece(targetTile.getChessPiece());
+                        chessBoard.add(selectedPiece, 1, targetRow);
+                        chessBoard.add(targetTile.getChessPiece(), 2, targetRow);
+                    }
+                    selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 6));
+                    targetTile.getChessPiece().setTile(chessBoard.getChessGridTileByName(7, 5));
+                    playerTurn.setNextTurn();
                 }
             }
             else {
@@ -297,7 +333,8 @@ public class ChessScene extends Scene {
                     if ((chessBoard.getChessGridTileByName(7, 5).getChessPiece() == null &&
                             chessBoard.getChessGridTileByName(7, 6).getChessPiece() == null) || (
                                     chessBoard.getChessGridTileByName(7, 1).getChessPiece() == null &&
-                            chessBoard.getChessGridTileByName(7, 2).getChessPiece() == null)) {
+                            chessBoard.getChessGridTileByName(7, 2).getChessPiece() == null &&
+                            chessBoard.getChessGridTileByName(7, 3).getChessPiece() == null)) {
                         ((King) chessPiece).setHasMoved(true);
                         ((Rook) targetTile.getChessPiece()).setHasMoved(true);
                         ((King) chessPiece).setCastling(true);
@@ -312,7 +349,8 @@ public class ChessScene extends Scene {
                     if ((chessBoard.getChessGridTileByName(0, 5).getChessPiece() == null &&
                             chessBoard.getChessGridTileByName(0, 6).getChessPiece() == null) || (
                             chessBoard.getChessGridTileByName(0, 1).getChessPiece() == null &&
-                                    chessBoard.getChessGridTileByName(0, 2).getChessPiece() == null)) {
+                                    chessBoard.getChessGridTileByName(0, 2).getChessPiece() == null &&
+                            chessBoard.getChessGridTileByName(0, 3).getChessPiece() == null)) {
                         ((King) chessPiece).setHasMoved(true);
                         ((Rook) targetTile.getChessPiece()).setHasMoved(true);
                         ((King) chessPiece).setCastling(true);
