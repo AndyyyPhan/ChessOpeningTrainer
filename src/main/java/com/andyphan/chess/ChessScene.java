@@ -74,14 +74,24 @@ public class ChessScene extends Scene {
         targetTile.setRowAndCol(chessGrid[targetRow][targetCol].getRow(), chessGrid[targetRow][targetCol].getCol());
         targetTile.setChessPiece(chessGrid[targetRow][targetCol].getChessPiece());
         if (selectedPiece != chessGrid[targetRow][targetCol].getChessPiece() && isValidMove(selectedPiece, targetTile)) {
-            chessBoard.getChildren().remove(selectedPiece);
-            chessGrid[selectedRow][selectedCol].setChessPiece(null);
-            selectedTile.resetTile();
-            if (targetTile.getChessPiece() != null) chessBoard.getChildren().remove(targetTile.getChessPiece());
-            chessGrid[targetRow][targetCol].setChessPiece(selectedPiece);
-            chessBoard.add(selectedPiece, targetCol, targetRow);
-            selectedPiece.setTile(chessGrid[targetRow][targetCol]);
-            playerTurn.setNextTurn();
+            if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling()) {
+                if (targetTile.getTileName().equals("a1")) {
+
+                }
+                else if (targetTile.getTileName().equals("h1")) {
+
+                }
+            }
+            else {
+                chessBoard.getChildren().remove(selectedPiece);
+                chessGrid[selectedRow][selectedCol].setChessPiece(null);
+                selectedTile.resetTile();
+                if (targetTile.getChessPiece() != null) chessBoard.getChildren().remove(targetTile.getChessPiece());
+                chessGrid[targetRow][targetCol].setChessPiece(selectedPiece);
+                chessBoard.add(selectedPiece, targetCol, targetRow);
+                selectedPiece.setTile(chessGrid[targetRow][targetCol]);
+                playerTurn.setNextTurn();
+            }
         }
         selectedTile.setRowAndCol(-1, -1);
     }
@@ -162,7 +172,8 @@ public class ChessScene extends Scene {
     private boolean isValidMove(ChessPiece chessPiece, Tile targetTile) {
         if (targetTile.getChessPiece() != null)
             if (targetTile.getChessPiece().getClass() == King.class ||
-                    targetTile.getChessPiece().getAlliance() == chessPiece.getAlliance()) return false;
+                    targetTile.getChessPiece().getAlliance() == chessPiece.getAlliance() && (chessPiece.getClass() != King.class
+                    && targetTile.getChessPiece().getClass() != Rook.class)) return false;
         if (chessPiece.getClass() == Pawn.class) return isPawnMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Knight.class) return isKnightMoveValid(chessPiece, targetTile);
         else if (chessPiece.getClass() == Bishop.class) return isBishopMoveValid(chessPiece, targetTile);
@@ -245,6 +256,7 @@ public class ChessScene extends Scene {
                 currentTile = chessBoard.getChessGridTileByName(currentTile.getRow(), currentTile.getCol()+1);
                 if (currentTile.getChessPiece() != null) return false;
             }
+            ((Rook) chessPiece).setHasMoved(true);
             return true;
         }
         else if (targetTile.getCol() < chessPiece.getCol()) {
@@ -252,6 +264,7 @@ public class ChessScene extends Scene {
                 currentTile = chessBoard.getChessGridTileByName(currentTile.getRow(), currentTile.getCol()-1);
                 if (currentTile.getChessPiece() != null) return false;
             }
+            ((Rook) chessPiece).setHasMoved(true);
             return true;
         }
         else if (targetTile.getRow() > chessPiece.getRow()) {
@@ -259,6 +272,7 @@ public class ChessScene extends Scene {
                 currentTile = chessBoard.getChessGridTileByName(currentTile.getRow()+1, currentTile.getCol());
                 if (currentTile.getChessPiece() != null) return false;
             }
+            ((Rook) chessPiece).setHasMoved(true);
             return true;
         }
         else if (targetTile.getRow() < chessPiece.getRow()) {
@@ -266,6 +280,7 @@ public class ChessScene extends Scene {
                 currentTile = chessBoard.getChessGridTileByName(currentTile.getRow()-1, currentTile.getCol());
                 if (currentTile.getChessPiece() != null) return false;
             }
+            ((Rook) chessPiece).setHasMoved(true);
             return true;
         }
         return false;
@@ -279,16 +294,43 @@ public class ChessScene extends Scene {
         if (chessPiece.getAlliance() == Alliance.WHITE) {
             if (!((King) chessPiece).getHasMoved() && targetTile.getChessPiece() != null) {
                 if (targetTile.getChessPiece().getClass() == Rook.class && !((Rook) targetTile.getChessPiece()).getHasMoved()) {
-                    return true;
+                    if ((chessBoard.getChessGridTileByName(7, 5).getChessPiece() == null &&
+                            chessBoard.getChessGridTileByName(7, 6).getChessPiece() == null) || (
+                                    chessBoard.getChessGridTileByName(7, 1).getChessPiece() == null &&
+                            chessBoard.getChessGridTileByName(7, 2).getChessPiece() == null)) {
+                        ((King) chessPiece).setHasMoved(true);
+                        ((Rook) targetTile.getChessPiece()).setHasMoved(true);
+                        ((King) chessPiece).setCastling(true);
+                        return true;
+                    }
                 }
             }
         }
-        return (chessPiece.getCol() + 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
+        else if (chessPiece.getAlliance() == Alliance.BLACK) {
+            if (!((King) chessPiece).getHasMoved() && targetTile.getChessPiece() != null) {
+                if (targetTile.getChessPiece().getClass() == Rook.class && !((Rook) targetTile.getChessPiece()).getHasMoved()) {
+                    if ((chessBoard.getChessGridTileByName(0, 5).getChessPiece() == null &&
+                            chessBoard.getChessGridTileByName(0, 6).getChessPiece() == null) || (
+                            chessBoard.getChessGridTileByName(0, 1).getChessPiece() == null &&
+                                    chessBoard.getChessGridTileByName(0, 2).getChessPiece() == null)) {
+                        ((King) chessPiece).setHasMoved(true);
+                        ((Rook) targetTile.getChessPiece()).setHasMoved(true);
+                        ((King) chessPiece).setCastling(true);
+                        return true;
+                    }
+                }
+            }
+        }
+        if ((chessPiece.getCol() + 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
                 chessPiece.getRow() + 1 == targetTile.getRow() || chessPiece.getRow() - 1 == targetTile.getRow())) ||
                 (chessPiece.getCol() - 1 == targetTile.getCol() && (chessPiece.getRow() == targetTile.getRow() ||
                         chessPiece.getRow() + 1 == targetTile.getRow() || chessPiece.getRow() - 1 == targetTile.getRow())) ||
                 (chessPiece.getRow() - 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol())
-                || (chessPiece.getRow() + 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol());
+                || (chessPiece.getRow() + 1 == targetTile.getRow() && chessPiece.getCol() == targetTile.getCol())) {
+            ((King) chessPiece).setHasMoved(true);
+            return true;
+        }
+        return false;
     }
 
     private void displayAllMoves() {
