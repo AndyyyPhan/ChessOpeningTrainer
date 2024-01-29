@@ -335,6 +335,18 @@ public class ChessScene extends Scene {
                     }
                 }
             }
+            if (move.contains("B")) {
+                for (int row=0; row<BOARD_SIZE; row++) {
+                    for (int col=0; col<BOARD_SIZE; col++) {
+                        if (chessBoard.getChessGridTileByName(row, col).getChessPiece() != null) {
+                            if (chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Bishop.class &&
+                                    chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
+                                    && isBishopMoveValid(chessBoard.getChessGridTileByName(row, col).getChessPiece(), moveTile))
+                                movingTile = chessBoard.getChessGridTileByName(row, col);
+                        }
+                    }
+                }
+            }
             if (move.contains("x")) {
                 String takingOn = move.substring(2);
                 Tile takingOnTile = new Tile(takingOn);
