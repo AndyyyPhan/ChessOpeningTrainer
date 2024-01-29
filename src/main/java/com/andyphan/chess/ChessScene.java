@@ -335,6 +335,20 @@ public class ChessScene extends Scene {
                     }
                 }
             }
+            if (move.contains("x")) {
+                String takingOn = move.substring(2);
+                Tile takingOnTile = new Tile(takingOn);
+                takingOnTile = chessBoard.getChessGridTileByName(takingOnTile.getRow(), takingOnTile.getCol());
+                for (int row=0; row<BOARD_SIZE; row++) {
+                    if (chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(0))).getChessPiece() != null &&
+                            chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(0))).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()) {
+                        if (isValidMove(chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(0))).getChessPiece(), takingOnTile)) {
+                            movingTile = chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(0)));
+                            moveTile = takingOnTile;
+                        }
+                    }
+                }
+            }
         }
         selectPiece(movingTile.getCol(), movingTile.getRow());
         movePiece(moveTile.getCol(), moveTile.getRow());
