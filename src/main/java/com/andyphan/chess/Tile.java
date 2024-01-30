@@ -21,7 +21,11 @@ public class Tile {
 
     public void setTileName(String tileName) {
         this.tileName = tileName;
-        if (!tileName.equals("O-O")) translateToNumbers(tileName);
+        if (!tileName.equals("O-O") && !tileName.equals("O-O-O")) translateToNumbers(tileName);
+        else {
+            row = 0;
+            col = 0;
+        }
     }
 
     private void translateToNumbers(String tileName) {
