@@ -20,8 +20,13 @@ public class Tile {
     }
 
     public void setTileName(String tileName) {
-        this.tileName = tileName;
-        if (!tileName.equals("O-O") && !tileName.equals("O-O-O")) translateToNumbers(tileName);
+        if (tileName.length() > 3 && !tileName.equals("O-O-O")) {
+            String substring = tileName.substring(tileName.length() - 2);
+            this.tileName = substring;
+            translateToNumbers(substring);
+        }
+        else this.tileName = tileName;
+        if (!tileName.equals("O-O") && tileName.length() <= 3) translateToNumbers(tileName);
         else {
             row = 0;
             col = 0;
