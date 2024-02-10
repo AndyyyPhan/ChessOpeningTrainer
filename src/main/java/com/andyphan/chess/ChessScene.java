@@ -230,10 +230,6 @@ public class ChessScene extends Scene {
         }
     }
 
-    private String getChessMove(Tile tile) {
-        return tile.getTileName();
-    }
-
     private void flipBoard() {
         Tile[][] chessGridCopy = new Tile[BOARD_SIZE][BOARD_SIZE];
         int rows = chessGrid.length;
