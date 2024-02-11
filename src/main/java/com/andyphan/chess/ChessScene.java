@@ -12,11 +12,9 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import static com.andyphan.chess.ChessBoard.BOARD_SIZE;
 import static com.andyphan.chess.ChessBoard.TILE_SIZE;
-import static java.lang.Math.abs;
 
 public class ChessScene extends Scene {
     private final ChessBoard chessBoard = new ChessBoard();
