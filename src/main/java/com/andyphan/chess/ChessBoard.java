@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 
 public class ChessBoard extends GridPane {
     protected static final int TILE_SIZE = 80;
-    protected static final int BOARD_SIZE = 8;
+    public static final int BOARD_SIZE = 8;
     private boolean isFlipped = false;
     private Tile[][] chessGrid = new Tile[BOARD_SIZE][BOARD_SIZE];
 
@@ -112,5 +112,15 @@ public class ChessBoard extends GridPane {
             }
         }
         return null;
+    }
+
+    public void setChessGridTileByName(int row, int col, ChessPiece chessPiece) {
+        int validRow = row;
+        int validCol = col;
+        if (isFlipped) {
+            validRow = 7 - row;
+            validCol = 7 - col;
+        }
+        chessGrid[validRow][validCol].setChessPiece(chessPiece);
     }
 }
