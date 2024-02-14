@@ -19,12 +19,14 @@ import static com.andyphan.chess.ChessBoard.TILE_SIZE;
 public class ChessScene extends Scene {
     private final ChessBoard chessBoard = new ChessBoard();
     protected Tile[][] chessGrid = chessBoard.getChessGrid();
-    private Tile selectedTile = new Tile(-1, -1);
+    private final Tile selectedTile = new Tile(-1, -1);
     private Tile targetTile = new Tile(-1, -1);
     private int selectedRow;
     private int selectedCol;
     private final Turn playerTurn = new Turn();
-    private Move move;
+    private final Move move;
+    private Button flipBoardButton = new Button("Flip Board");
+    private Button showAllMovesButton = new Button("Show All Moves");
     public ChessScene(ChessOpening chessOpening) {
         super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
         initializePieces();
@@ -37,15 +39,13 @@ public class ChessScene extends Scene {
 
         });
 
-        Button flipBoardButton = new Button("Flip Board");
         flipBoardButton.setOnAction(event -> flipBoard());
 
         move = new Move(chessOpening);
-        Button showAllMoves = new Button("Show All Moves");
-        showAllMoves.setOnAction(event -> displayAllMoves());
+        showAllMovesButton.setOnAction(event -> displayAllMoves());
 
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(chessBoard, flipBoardButton, showAllMoves);
+        layout.getChildren().addAll(chessBoard, flipBoardButton, showAllMovesButton);
     }
 
     private void handleMouseClick(int clickedCol, int clickedRow) {
@@ -73,7 +73,7 @@ public class ChessScene extends Scene {
         ChessPiece targetPiece = targetTile.getChessPiece();
         if (selectedPiece != targetPiece && selectedPiece.isValidMove(targetTile)) {
             if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling()) {
-                handleCastling(targetCol, targetRow, selectedPiece);
+                handleCastling(targetRow, selectedPiece);
             }
             else {
                 chessBoard.getChildren().remove(selectedPiece);
@@ -89,75 +89,76 @@ public class ChessScene extends Scene {
         selectedTile.setRowAndCol(-1, -1);
     }
 
-    private void handleCastling(int targetCol, int targetRow, ChessPiece selectedPiece) {
+    private void handleCastling(int targetRow, ChessPiece selectedPiece) {
+        ChessPiece targetPiece = targetTile.getChessPiece();
         chessBoard.getChildren().remove(selectedPiece);
-        chessBoard.getChildren().remove(targetTile.getChessPiece());
+        chessBoard.getChildren().remove(targetPiece);
         chessGrid[selectedRow][selectedCol].setChessPiece(null);
-        chessGrid[targetRow][targetCol].setChessPiece(null);
+        targetTile.setChessPiece(null);
         if (selectedPiece.getAlliance() == Alliance.WHITE) {
             if (targetTile.getTileName().equals("a1")) {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[7][2].setChessPiece(selectedPiece);
-                    chessGrid[7][3].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[7][3].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 2, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 3, targetRow);
+                    chessBoard.add(targetPiece, 3, targetRow);
                 } else {
                     chessGrid[0][5].setChessPiece(selectedPiece);
-                    chessGrid[0][4].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[0][4].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 5, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 4, targetRow);
+                    chessBoard.add(targetPiece, 4, targetRow);
                 }
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 2));
-                targetTile.getChessPiece().setTile(chessBoard.getChessGridTileByName(7, 3));
+                targetPiece.setTile(chessBoard.getChessGridTileByName(7, 3));
             } else if (targetTile.getTileName().equals("h1")) {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[7][6].setChessPiece(selectedPiece);
-                    chessGrid[7][5].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[7][5].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 6, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 5, targetRow);
+                    chessBoard.add(targetPiece, 5, targetRow);
                 } else {
                     chessGrid[0][1].setChessPiece(selectedPiece);
-                    chessGrid[0][2].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[0][2].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 1, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 2, targetRow);
+                    chessBoard.add(targetPiece, 2, targetRow);
                 }
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 6));
-                targetTile.getChessPiece().setTile(chessBoard.getChessGridTileByName(7, 5));
+                targetPiece.setTile(chessBoard.getChessGridTileByName(7, 5));
             }
         }
         else {
             if (targetTile.getTileName().equals("a8")) {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[0][2].setChessPiece(selectedPiece);
-                    chessGrid[0][3].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[0][3].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 2, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 3, targetRow);
+                    chessBoard.add(targetPiece, 3, targetRow);
                 } else {
                     chessGrid[7][5].setChessPiece(selectedPiece);
-                    chessGrid[7][4].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[7][4].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 5, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 4, targetRow);
+                    chessBoard.add(targetPiece, 4, targetRow);
                 }
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(0, 2));
-                targetTile.getChessPiece().setTile(chessBoard.getChessGridTileByName(0, 3));
+                targetPiece.setTile(chessBoard.getChessGridTileByName(0, 3));
             } else if (targetTile.getTileName().equals("h8")) {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[0][6].setChessPiece(selectedPiece);
-                    chessGrid[0][5].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[0][5].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 6, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 5, targetRow);
+                    chessBoard.add(targetPiece, 5, targetRow);
                 } else {
                     chessGrid[7][1].setChessPiece(selectedPiece);
-                    chessGrid[7][2].setChessPiece(targetTile.getChessPiece());
+                    chessGrid[7][2].setChessPiece(targetPiece);
                     chessBoard.add(selectedPiece, 1, targetRow);
-                    chessBoard.add(targetTile.getChessPiece(), 2, targetRow);
+                    chessBoard.add(targetPiece, 2, targetRow);
                 }
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(0, 6));
-                targetTile.getChessPiece().setTile(chessBoard.getChessGridTileByName(0, 5));
+                targetPiece.setTile(chessBoard.getChessGridTileByName(0, 5));
             }
         }
         ((King) selectedPiece).setHasMoved(true);
-        ((Rook) targetTile.getChessPiece()).setHasMoved(true);
+        ((Rook) targetPiece).setHasMoved(true);
         playerTurn.setNextTurn();
     }
 
@@ -170,6 +171,7 @@ public class ChessScene extends Scene {
         else if (imageName.contains("King")) chessBoard.getChessGridTile(tile.getRow(), tile.getCol()).setChessPiece(new King(chessBoard, imageName));
         chessBoard.add(chessBoard.getChessGridTile(tile.getRow(), tile.getCol()).getChessPiece(), tile.getCol(), tile.getRow());
         chessBoard.getChessGridTile(tile.getRow(), tile.getCol()).getChessPiece().setTile(tile);
+        chessGrid[tile.getRow()][tile.getCol()].getChessPiece().setTile(tile);
     }
 
     private void initializePieces() {
@@ -225,12 +227,35 @@ public class ChessScene extends Scene {
         chessBoard.getChildren().clear();
         chessBoard.setFlipped(!chessBoard.getFlipped());
         chessBoard.drawBoard();
-        chessBoard.setChessGrid(chessGridCopy);
+        chessBoard.setFlippedChessGrid(chessGridCopy);
         setupPieces();
         selectedTile.resetTile();
     }
 
+    private void resetBoard() {
+        boolean wasFlipped = chessBoard.getFlipped();
+        System.out.println(wasFlipped);
+        if (chessBoard.getFlipped()) flipBoard();
+        Tile[][] chessGridCopy = new Tile[BOARD_SIZE][BOARD_SIZE];
+        int rows = chessGrid.length;
+        int cols = chessGrid[0].length;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                chessGridCopy[row][col] = new Tile(row,col);
+            }
+        }
+        chessBoard.getChildren().clear();
+        chessBoard.setChessGrid(chessGridCopy);
+        chessGrid = chessGridCopy;
+        chessBoard.drawBoard();
+        initializePieces();
+        selectedTile.resetTile();
+        if (wasFlipped) flipBoard();
+    }
+
     private void displayAllMoves() {
+        resetBoard();
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         Duration moveDuration = Duration.seconds(1);
@@ -250,6 +275,10 @@ public class ChessScene extends Scene {
             );
             timeline.getKeyFrames().add(keyFrame);
         }
+        showAllMovesButton.setDisable(true);
+        timeline.setDelay(Duration.seconds(1));
+
+        timeline.setOnFinished(event -> showAllMovesButton.setDisable(false));
 
         timeline.play();
     }
@@ -450,6 +479,8 @@ public class ChessScene extends Scene {
                 }
             }
         }
+        System.out.println(movingTile.getTileName());
+        System.out.println(moveTile.getTileName());
         if (!chessBoard.getFlipped()) {
             selectPiece(movingTile.getCol(), movingTile.getRow());
             movePiece(moveTile.getCol(), moveTile.getRow());
