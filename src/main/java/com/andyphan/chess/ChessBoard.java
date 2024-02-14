@@ -19,12 +19,11 @@ public class ChessBoard extends GridPane {
     }
 
     protected void drawBoard() {
-        if (isFlipped) {
-            for (int row = 0; row < BOARD_SIZE; row++) {
-                for (int col = 0; col < BOARD_SIZE; col++) {
-                    drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
-                    chessGrid[row][col] = new Tile(7-row, 7-col);
-
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
+                chessGrid[row][col] = new Tile(row, col);
+                if (isFlipped) {
                     Text colLabel = new Text(String.valueOf((char) ('h' - col)));
                     colLabel.setFont(new Font(15));
                     colLabel.setStyle("-fx-font-weight: bold");
@@ -33,7 +32,7 @@ public class ChessBoard extends GridPane {
                     colPane.setAlignment(Pos.CENTER);
                     add(colPane, col, 8);
 
-                    Text rowLabel = new Text(String.valueOf(row+1));
+                    Text rowLabel = new Text(String.valueOf(row + 1));
                     rowLabel.setFont(new Font(15));
                     rowLabel.setStyle("-fx-font-weight: bold");
                     StackPane rowPane = new StackPane(rowLabel);
@@ -41,14 +40,7 @@ public class ChessBoard extends GridPane {
                     rowPane.setAlignment(Pos.CENTER);
                     add(rowPane, 9, row);
                 }
-            }
-        }
-        else {
-            for (int row = 0; row < BOARD_SIZE; row++) {
-                for (int col = 0; col < BOARD_SIZE; col++) {
-                    drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
-                    chessGrid[row][col] = new Tile(row, col);
-
+                else {
                     Text colLabel = new Text(String.valueOf((char) ('a' + col)));
                     colLabel.setFont(new Font(15));
                     colLabel.setStyle("-fx-font-weight: bold");
