@@ -82,17 +82,6 @@ public class Tile {
         tileName = String.valueOf(columns.get(col)) +
                 (8 - row);
     }
-
-    public String getTilenameWithPiece() {
-        if (chessPiece == null) return getTileName();
-        if (chessPiece.getClass() == Knight.class) return "N" + getTileName();
-        if (chessPiece.getClass() == Bishop.class) return "B" + getTileName();
-        if (chessPiece.getClass() == Rook.class) return "R" + getTileName();
-        if (chessPiece.getClass() == Queen.class) return "Q" + getTileName();
-        if (chessPiece.getClass() == King.class) return "K" + getTileName();
-        return getTileName();
-    }
-
     public void setChessPiece(ChessPiece chessPiece) {
         this.chessPiece = chessPiece;
         setOccupied(true);
