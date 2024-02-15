@@ -26,8 +26,7 @@ public class ChessScene extends Scene {
     private int selectedCol;
     private final Turn playerTurn = new Turn();
     private final Move move;
-    private Button flipBoardButton = new Button("Flip Board");
-    private Button showAllMovesButton = new Button("Show All Moves");
+    private final Button showAllMovesButton = new Button("Show All Moves");
     public ChessScene(ChessOpening chessOpening) {
         super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
         initializePieces();
@@ -41,6 +40,7 @@ public class ChessScene extends Scene {
         });
 
         PauseTransition buttonPause = new PauseTransition(Duration.seconds(0.5));
+        Button flipBoardButton = new Button("Flip Board");
         flipBoardButton.setOnAction(event -> {
             if (!buttonPause.getStatus().equals(PauseTransition.Status.RUNNING)) {
                 flipBoard();
