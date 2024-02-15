@@ -108,14 +108,4 @@ public class ChessBoard extends GridPane {
         }
         return null;
     }
-
-    public void setChessGridTileByName(int row, int col, ChessPiece chessPiece) {
-        int validRow = row;
-        int validCol = col;
-        if (isFlipped) {
-            validRow = 7 - row;
-            validCol = 7 - col;
-        }
-        chessGrid[validRow][validCol].setChessPiece(chessPiece);
-    }
 }
