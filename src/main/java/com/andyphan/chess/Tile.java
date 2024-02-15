@@ -25,9 +25,9 @@ public class Tile {
             this.tileName = substring;
             translateToNumbers(substring);
         }
-        else this.tileName = tileName;
-        if (!tileName.equals("O-O") && tileName.length() <= 3) translateToNumbers(tileName);
+        else if (!tileName.equals("O-O") && tileName.length() <= 3) translateToNumbers(tileName);
         else {
+            this.tileName = tileName;
             row = 0;
             col = 0;
         }
