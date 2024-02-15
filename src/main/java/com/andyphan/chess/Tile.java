@@ -1,7 +1,4 @@
 package com.andyphan.chess;
-
-import com.andyphan.chess.pieces.*;
-
 import java.util.HashMap;
 
 public class Tile {
