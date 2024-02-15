@@ -3,6 +3,7 @@ package com.andyphan.chess;
 import com.andyphan.chess.pieces.*;
 import com.andyphan.chessopeningtrainer.ChessOpening;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -39,7 +40,13 @@ public class ChessScene extends Scene {
 
         });
 
-        flipBoardButton.setOnAction(event -> flipBoard());
+        PauseTransition buttonPause = new PauseTransition(Duration.seconds(0.5));
+        flipBoardButton.setOnAction(event -> {
+            if (!buttonPause.getStatus().equals(PauseTransition.Status.RUNNING)) {
+                flipBoard();
+                buttonPause.playFromStart();
+            }
+        });
 
         move = new Move(chessOpening);
         showAllMovesButton.setOnAction(event -> displayAllMoves());
@@ -234,7 +241,6 @@ public class ChessScene extends Scene {
 
     private void resetBoard() {
         boolean wasFlipped = chessBoard.getFlipped();
-        System.out.println(wasFlipped);
         if (chessBoard.getFlipped()) flipBoard();
         Tile[][] chessGridCopy = new Tile[BOARD_SIZE][BOARD_SIZE];
         int rows = chessGrid.length;
@@ -479,8 +485,6 @@ public class ChessScene extends Scene {
                 }
             }
         }
-        System.out.println(movingTile.getTileName());
-        System.out.println(moveTile.getTileName());
         if (!chessBoard.getFlipped()) {
             selectPiece(movingTile.getCol(), movingTile.getRow());
             movePiece(moveTile.getCol(), moveTile.getRow());
