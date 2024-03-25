@@ -23,7 +23,7 @@ public class Move {
     }
 
     public String[] getAllMovesInList() {
-        String[] allMoves = getAllMoves().split("[0-9]+. ");
+        String[] allMoves = getAllMoves().split("[0-9]+\\. ");
         String[] refactoredAllMoves = new String[allMoves.length-1];
         System.arraycopy(allMoves, 1, refactoredAllMoves, 0, allMoves.length-1);
         return refactoredAllMoves;
