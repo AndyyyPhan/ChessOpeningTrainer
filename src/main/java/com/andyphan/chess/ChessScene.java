@@ -442,6 +442,21 @@ public class ChessScene extends Scene {
                 }
             }
         }
+        else if (move.length() == 4 && move.charAt(0) == 'N') {
+            String takingOn = move.substring(move.length()-2);
+            Tile takingOnTile = new Tile(takingOn);
+            takingOnTile = chessBoard.getChessGridTileByName(takingOnTile.getRow(), takingOnTile.getCol());
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                if (chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(1))).getChessPiece() != null &&
+                        chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(1))).getChessPiece().getAlliance() == playerTurn.getCurrentTurn() &&
+                        chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(1))).getChessPiece().getClass() == Knight.class) {
+                    if (chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(1))).getChessPiece().isValidMove(takingOnTile)) {
+                        movingTile = chessBoard.getChessGridTileByName(row, moveTile.translateColToNumber(move.charAt(1)));
+                        moveTile = takingOnTile;
+                    }
+                }
+            }
+        }
         else if (move.length() == 4 && move.charAt(0) == 'R') {
             String takingOn = move.substring(move.length()-2);
             Tile takingOnTile = new Tile(takingOn);
