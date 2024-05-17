@@ -18,6 +18,7 @@ import static com.andyphan.chess.ChessBoard.BOARD_SIZE;
 import static com.andyphan.chess.ChessBoard.TILE_SIZE;
 
 public class ChessScene extends Scene {
+    protected final VBox layout = (VBox) getRoot();
     private final ChessBoard chessBoard = new ChessBoard();
     protected Tile[][] chessGrid = chessBoard.getChessGrid();
     private final Tile selectedTile = new Tile(-1, -1);
@@ -26,10 +27,15 @@ public class ChessScene extends Scene {
     private int selectedCol;
     private final Turn playerTurn = new Turn();
     private final Move move;
-    private final Button showAllMovesButton = new Button("Show All Moves");
+    protected Button flipBoardButton = new Button("Flip Board");
+    protected Button showAllMovesButton = new Button("Show All Moves");
     public ChessScene(ChessOpening chessOpening) {
         super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
+        layout.getChildren().add(chessBoard);
+        move = new Move(chessOpening);
         initializePieces();
+        initializeButtons();
+
 
         chessBoard.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
@@ -38,21 +44,6 @@ public class ChessScene extends Scene {
             handleMouseClick((int) event.getX() / TILE_SIZE, (int) event.getY() / TILE_SIZE);
 
         });
-
-        PauseTransition buttonPause = new PauseTransition(Duration.seconds(0.5));
-        Button flipBoardButton = new Button("Flip Board");
-        flipBoardButton.setOnAction(event -> {
-            if (!buttonPause.getStatus().equals(PauseTransition.Status.RUNNING)) {
-                flipBoard();
-                buttonPause.playFromStart();
-            }
-        });
-
-        move = new Move(chessOpening);
-        showAllMovesButton.setOnAction(event -> displayAllMoves());
-
-        VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(chessBoard, flipBoardButton, showAllMovesButton);
     }
 
     private void handleMouseClick(int clickedCol, int clickedRow) {
@@ -64,7 +55,7 @@ public class ChessScene extends Scene {
         }
     }
 
-    private void selectPiece(int col, int row) {
+    protected void selectPiece(int col, int row) {
         ChessPiece selectedPiece = chessGrid[row][col].getChessPiece();
         if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(row, col);
@@ -74,7 +65,7 @@ public class ChessScene extends Scene {
         }
     }
 
-    private void movePiece(int targetCol, int targetRow) {
+    protected void movePiece(int targetCol, int targetRow) {
         ChessPiece selectedPiece = selectedTile.getChessPiece();
         targetTile = chessGrid[targetRow][targetCol];
         ChessPiece targetPiece = targetTile.getChessPiece();
@@ -94,6 +85,47 @@ public class ChessScene extends Scene {
             }
         }
         selectedTile.setRowAndCol(-1, -1);
+    }
+
+    private void initializePieces() {
+        for (Tile[] tileArray : chessGrid) {
+            for (Tile tile : tileArray) {
+                if (tile.getTileName().contains("2")) addPiece("whitePawn.png", tile);
+                else if (tile.getTileName().contains("7")) addPiece("blackPawn.png", tile);
+            }
+        }
+        addPiece("whiteKnight.png", chessBoard.getChessGridTile(7, 1));
+        addPiece("whiteKnight.png", chessBoard.getChessGridTile(7, 6));
+        addPiece("blackKnight.png", chessBoard.getChessGridTile(0, 1));
+        addPiece("blackKnight.png", chessBoard.getChessGridTile(0, 6));
+
+        addPiece("whiteBishop.png", chessBoard.getChessGridTile(7, 2));
+        addPiece("whiteBishop.png", chessBoard.getChessGridTile(7, 5));
+        addPiece("blackBishop.png", chessBoard.getChessGridTile(0, 2));
+        addPiece("blackBishop.png", chessBoard.getChessGridTile(0, 5));
+
+        addPiece("whiteRook.png", chessBoard.getChessGridTile(7, 0));
+        addPiece("whiteRook.png", chessBoard.getChessGridTile(7, 7));
+        addPiece("blackRook.png", chessBoard.getChessGridTile(0, 0));
+        addPiece("blackRook.png", chessBoard.getChessGridTile(0, 7));
+
+        addPiece("whiteQueen.png", chessBoard.getChessGridTile(7, 3));
+        addPiece("blackQueen.png", chessBoard.getChessGridTile(0, 3));
+
+        addPiece("whiteKing.png", chessBoard.getChessGridTile(7, 4));
+        addPiece("blackKing.png", chessBoard.getChessGridTile(0, 4));
+    }
+
+    protected void initializeButtons() {
+        PauseTransition buttonPause = new PauseTransition(Duration.seconds(0.5));
+        flipBoardButton.setOnAction(event -> {
+            if (!buttonPause.getStatus().equals(PauseTransition.Status.RUNNING)) {
+                flipBoard();
+                buttonPause.playFromStart();
+            }
+        });
+        showAllMovesButton.setOnAction(event -> displayAllMoves());
+        layout.getChildren().addAll(flipBoardButton, showAllMovesButton);
     }
 
     private void handleCastling(int targetRow, ChessPiece selectedPiece) {
@@ -179,35 +211,6 @@ public class ChessScene extends Scene {
         chessBoard.add(chessBoard.getChessGridTile(tile.getRow(), tile.getCol()).getChessPiece(), tile.getCol(), tile.getRow());
         chessBoard.getChessGridTile(tile.getRow(), tile.getCol()).getChessPiece().setTile(tile);
         chessGrid[tile.getRow()][tile.getCol()].getChessPiece().setTile(tile);
-    }
-
-    private void initializePieces() {
-        for (Tile[] tileArray : chessGrid) {
-            for (Tile tile : tileArray) {
-                if (tile.getTileName().contains("2")) addPiece("whitePawn.png", tile);
-                else if (tile.getTileName().contains("7")) addPiece("blackPawn.png", tile);
-            }
-        }
-        addPiece("whiteKnight.png", chessBoard.getChessGridTile(7, 1));
-        addPiece("whiteKnight.png", chessBoard.getChessGridTile(7, 6));
-        addPiece("blackKnight.png", chessBoard.getChessGridTile(0, 1));
-        addPiece("blackKnight.png", chessBoard.getChessGridTile(0, 6));
-
-        addPiece("whiteBishop.png", chessBoard.getChessGridTile(7, 2));
-        addPiece("whiteBishop.png", chessBoard.getChessGridTile(7, 5));
-        addPiece("blackBishop.png", chessBoard.getChessGridTile(0, 2));
-        addPiece("blackBishop.png", chessBoard.getChessGridTile(0, 5));
-
-        addPiece("whiteRook.png", chessBoard.getChessGridTile(7, 0));
-        addPiece("whiteRook.png", chessBoard.getChessGridTile(7, 7));
-        addPiece("blackRook.png", chessBoard.getChessGridTile(0, 0));
-        addPiece("blackRook.png", chessBoard.getChessGridTile(0, 7));
-
-        addPiece("whiteQueen.png", chessBoard.getChessGridTile(7, 3));
-        addPiece("blackQueen.png", chessBoard.getChessGridTile(0, 3));
-
-        addPiece("whiteKing.png", chessBoard.getChessGridTile(7, 4));
-        addPiece("blackKing.png", chessBoard.getChessGridTile(0, 4));
     }
 
     private void setupPieces() {
