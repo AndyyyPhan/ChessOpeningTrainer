@@ -57,8 +57,40 @@ public class AllOpeningsMenu extends Scene {
         pagination.setPageCount(getNewPageCount());
         });
 
+        Label createOpeningLabel = new Label("Click here to create a new opening:");
+        createOpeningLabel.setFont(new Font(15));
+        Button createOpeningButton = new Button("Create Opening");
+        createOpeningButton.setOnAction(e -> {
+            if (isChessSceneOpen) {
+                activeChessScene.toFront();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Chess Scene Active");
+                alert.setHeaderText("A chess scene is currently active");
+                alert.setContentText("Please close active chess scene before opening a new one.");
+                alert.showAndWait();
+            }
+            else {
+                Stage createChessOpeningStage = new Stage();
+                isChessSceneOpen = true;
+                activeChessScene = createChessOpeningStage;
+                createChessOpeningStage.initModality(Modality.WINDOW_MODAL);
+                createChessOpeningStage.initOwner(SceneManager.getPrimaryStage());
+                createChessOpeningStage.setScene(new CreateChessOpening(new ChessOpening()));
+                createChessOpeningStage.setOnCloseRequest(event1 -> {
+                    isChessSceneOpen = false;
+                    activeChessScene = null;
+                });
+                createChessOpeningStage.show();
+            }
+        });
+
+        Label editOpeningLabel = new Label("Click here to edit an existing opening that you have created:");
+        editOpeningLabel.setFont(new Font(15));
+        Button editOpeningButton = new Button("Edit Opening");
+
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(mainLabelContainer, new HBox (5, filterLabel, filterField), pagination);
+        layout.getChildren().addAll(mainLabelContainer, new HBox(5, filterLabel, filterField), pagination,
+                new HBox(5, createOpeningLabel, createOpeningButton), new HBox(5, editOpeningLabel, editOpeningButton));
     }
 
     private int getPageCount() {
