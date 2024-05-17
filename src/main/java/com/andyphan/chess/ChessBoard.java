@@ -9,7 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class ChessBoard extends GridPane {
-    protected static final int TILE_SIZE = 80;
+    public static final int TILE_SIZE = 80;
     public static final int BOARD_SIZE = 8;
     private boolean isFlipped = false;
     private Tile[][] chessGrid = new Tile[BOARD_SIZE][BOARD_SIZE];
