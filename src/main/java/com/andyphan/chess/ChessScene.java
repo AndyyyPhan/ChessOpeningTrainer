@@ -21,12 +21,14 @@ public class ChessScene extends Scene {
     protected final VBox layout = (VBox) getRoot();
     private final ChessBoard chessBoard = new ChessBoard();
     protected Tile[][] chessGrid = chessBoard.getChessGrid();
-    private final Tile selectedTile = new Tile(-1, -1);
-    private Tile targetTile = new Tile(-1, -1);
-    private int selectedRow;
-    private int selectedCol;
-    private final Turn playerTurn = new Turn();
+    protected final Tile selectedTile = new Tile(-1, -1);
+    protected Tile targetTile = new Tile(-1, -1);
+    protected int selectedRow;
+    protected int selectedCol;
+    protected final Turn playerTurn = new Turn();
     private final Move move;
+    protected boolean isValidSelection;
+    protected boolean isValidMove;
     protected Button flipBoardButton = new Button("Flip Board");
     protected Button showAllMovesButton = new Button("Show All Moves");
     public ChessScene(ChessOpening chessOpening) {
@@ -62,6 +64,10 @@ public class ChessScene extends Scene {
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
             selectedRow = row;
             selectedCol = col;
+            isValidSelection = true;
+        }
+        else {
+            isValidSelection = false;
         }
     }
 
@@ -83,6 +89,10 @@ public class ChessScene extends Scene {
                 selectedPiece.setTile(targetTile);
                 playerTurn.setNextTurn();
             }
+            isValidMove = true;
+        }
+        else {
+            isValidMove = false;
         }
         selectedTile.setRowAndCol(-1, -1);
     }
