@@ -25,6 +25,8 @@ public class ChessScene extends Scene {
     protected Tile targetTile = new Tile(-1, -1);
     protected int selectedRow;
     protected int selectedCol;
+    protected ChessPiece selectedPiece;
+    protected ChessPiece targetPiece;
     protected final Turn playerTurn = new Turn();
     private final Move move;
     protected boolean isValidSelection;
@@ -58,7 +60,7 @@ public class ChessScene extends Scene {
     }
 
     protected void selectPiece(int col, int row) {
-        ChessPiece selectedPiece = chessGrid[row][col].getChessPiece();
+        selectedPiece = chessGrid[row][col].getChessPiece();
         if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(row, col);
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
@@ -72,9 +74,9 @@ public class ChessScene extends Scene {
     }
 
     protected void movePiece(int targetCol, int targetRow) {
-        ChessPiece selectedPiece = selectedTile.getChessPiece();
+        selectedPiece = selectedTile.getChessPiece();
         targetTile = chessGrid[targetRow][targetCol];
-        ChessPiece targetPiece = targetTile.getChessPiece();
+        targetPiece = targetTile.getChessPiece();
         if (selectedPiece != targetPiece && selectedPiece.isValidMove(targetTile)) {
             if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling()) {
                 handleCastling(targetRow, selectedPiece);
@@ -139,7 +141,7 @@ public class ChessScene extends Scene {
     }
 
     private void handleCastling(int targetRow, ChessPiece selectedPiece) {
-        ChessPiece targetPiece = targetTile.getChessPiece();
+        targetPiece = targetTile.getChessPiece();
         chessBoard.getChildren().remove(selectedPiece);
         chessBoard.getChildren().remove(targetPiece);
         chessGrid[selectedRow][selectedCol].setChessPiece(null);
