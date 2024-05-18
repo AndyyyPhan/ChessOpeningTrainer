@@ -1,7 +1,8 @@
 package com.andyphan.chessopeningtrainer;
 
-import com.andyphan.chess.ChessPiece;
+import com.andyphan.chess.Alliance;
 import com.andyphan.chess.ChessScene;
+import com.andyphan.chess.pieces.Pawn;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
@@ -32,7 +33,13 @@ public class CreateChessOpening extends ChessScene {
     protected void selectPiece(int col, int row) {
         super.selectPiece(col, row);
         if (isValidSelection) {
-            firstHalf.append(moveCounter).append(". ").append(selectedTile.getTileName()).append(" ");
+            if (playerTurn.getCurrentTurn() == Alliance.WHITE) {
+                stringBuilder.append(moveCounter).append(". ");
+                moveCounter++;
+            }
+            if (selectedPiece.getClass() == Pawn.class) {
+                firstHalf.append(selectedTile.getTileName());
+            }
         }
     }
 
@@ -40,9 +47,15 @@ public class CreateChessOpening extends ChessScene {
     protected void movePiece(int targetCol, int targetRow) {
         super.movePiece(targetCol, targetRow);
         if (isValidMove) {
-            stringBuilder.append(firstHalf).append(targetTile.getTileName()).append(" ");
+            if (selectedPiece.getClass() == Pawn.class) {
+                if (targetPiece != null) {
+                    stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
+                }
+                else {
+                    stringBuilder.append(targetTile.getTileName()).append(" ");
+                }
+            }
             moves = stringBuilder.toString();
-            moveCounter++;
         }
         firstHalf.setLength(0);
     }
