@@ -2,6 +2,7 @@ package com.andyphan.chessopeningtrainer;
 
 import com.andyphan.chess.Alliance;
 import com.andyphan.chess.ChessScene;
+import com.andyphan.chess.pieces.Bishop;
 import com.andyphan.chess.pieces.King;
 import com.andyphan.chess.pieces.Knight;
 import com.andyphan.chess.pieces.Pawn;
@@ -37,7 +38,7 @@ public class CreateChessOpening extends ChessScene {
     @Override
     protected void selectPiece(int col, int row) {
         selectedPiece = chessGrid[row][col].getChessPiece();
-        boolean isValidSelection;
+        boolean isValidSelection = false;
         if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(row, col);
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
@@ -45,18 +46,16 @@ public class CreateChessOpening extends ChessScene {
             selectedCol = col;
             isValidSelection = true;
         }
-        else {
-            isValidSelection = false;
-        }
 
         if (isValidSelection) {
             if (playerTurn.getCurrentTurn() == Alliance.WHITE) {
                 stringBuilder.append(moveCounter).append(". ");
                 moveCounter++;
             }
-            if (selectedPiece.getClass() == Knight.class) {
-                firstHalf.append("N"); // REMOVE: Update tile's getTileName() method so this is done automatically.
-            }
+            if (selectedPiece.getClass() == Knight.class) firstHalf.append("N");
+            else if (selectedPiece.getClass() == Bishop.class) firstHalf.append("B");
+            System.out.println(selectedPiece.getClass());
+
             firstHalf.append(selectedTile.getTileName());
         }
     }
@@ -102,12 +101,8 @@ public class CreateChessOpening extends ChessScene {
 
         if (isValidMove) {
             if (selectedPiece.getClass() == Pawn.class) {
-                if (targetPiece == null) {
-                    stringBuilder.append(targetTile.getTileName()).append(" ");
-                }
-                else {
-                    stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
-                }
+                if (targetPiece == null) stringBuilder.append(targetTile.getTileName()).append(" ");
+                else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
             }
             else if (selectedPiece.getClass() == Knight.class) {
                 if (targetPiece == null) {
@@ -120,6 +115,10 @@ public class CreateChessOpening extends ChessScene {
                     if (isOtherKnightMove) stringBuilder.append(firstHalf.substring(0, 2)).append("x").append(targetTile.getTileName()).append(" ");
                     else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
                 }
+            }
+            else if (selectedPiece.getClass() == Bishop.class) {
+                if (targetPiece == null) stringBuilder.append(firstHalf.toString().charAt(0)).append(targetTile.getTileName()).append(" ");
+                else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
             }
             moves = stringBuilder.toString();
         }
