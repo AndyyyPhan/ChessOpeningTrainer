@@ -3,8 +3,15 @@ package com.andyphan.chessopeningtrainer;
 import com.andyphan.chess.Alliance;
 import com.andyphan.chess.ChessScene;
 import com.andyphan.chess.pieces.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.andyphan.chess.ChessBoard.BOARD_SIZE;
 
@@ -13,6 +20,7 @@ public class CreateChessOpening extends ChessScene {
     private StringBuilder stringBuilder = new StringBuilder();
     private StringBuilder firstHalf = new StringBuilder();
     private int moveCounter = 1;
+    private boolean showingAllMoves = false;
 
     public CreateChessOpening(ChessOpening chessOpening) {
         super(chessOpening);
@@ -22,7 +30,6 @@ public class CreateChessOpening extends ChessScene {
     protected void initializeButtons() {
         super.initializeButtons();
         layout.getChildren().removeAll(flipBoardButton, showAllMovesButton);
-        showAllMovesButton.setDisable(true);
         Button save = new Button("Save");
         save.setOnAction(e -> {
             moves = stringBuilder.toString();
@@ -30,6 +37,57 @@ public class CreateChessOpening extends ChessScene {
         });
         Button exit = new Button("Exit");
         layout.getChildren().addAll(new HBox(5, flipBoardButton, showAllMovesButton), new HBox(5, save, exit));
+    }
+
+    @Override
+    protected void displayAllMoves() {
+        if (this.moves == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No Moves");
+            alert.setHeaderText("There are no moves in play.");
+            alert.setContentText("Please make moves before \"Showing all moves\"");
+            alert.showAndWait();
+        }
+        else {
+            System.out.println(this.moves);
+            resetBoard();
+            Timeline timeline = new Timeline();
+            timeline.setCycleCount(1);
+            Duration moveDuration = Duration.seconds(1);
+            ArrayList<String> singleMove = new ArrayList<>();
+
+            for (int i = 0; i < getAllMovesInList().length; i++) {
+                String movePair = getAllMovesInList()[i].trim();
+                String[] individualMove = movePair.split(" ");
+
+                singleMove.addAll(Arrays.asList(individualMove));
+            }
+            for (int i = 0; i < singleMove.size(); i++) {
+                int finalI = i;
+                KeyFrame keyFrame = new KeyFrame(
+                        moveDuration.multiply(i),
+                        event -> playMove(singleMove.get(finalI))
+                );
+                timeline.getKeyFrames().add(keyFrame);
+            }
+            showAllMovesButton.setDisable(true);
+            showingAllMoves = true;
+            timeline.setDelay(Duration.seconds(1));
+
+            timeline.setOnFinished(event -> {
+                showAllMovesButton.setDisable(false);
+                showingAllMoves = false;
+            });
+
+            timeline.play();
+        }
+    }
+
+    private String[] getAllMovesInList() {
+        String[] allMoves = moves.split("[0-9]+\\. ");
+        String[] refactoredAllMoves = new String[allMoves.length-1];
+        System.arraycopy(allMoves, 1, refactoredAllMoves, 0, allMoves.length-1);
+        return refactoredAllMoves;
     }
 
     @Override
@@ -44,7 +102,7 @@ public class CreateChessOpening extends ChessScene {
             isValidSelection = true;
         }
 
-        if (isValidSelection) {
+        if (isValidSelection && !showingAllMoves) {
             if (playerTurn.getCurrentTurn() == Alliance.WHITE) {
                 stringBuilder.append(moveCounter).append(". ");
                 moveCounter++;
@@ -113,7 +171,7 @@ public class CreateChessOpening extends ChessScene {
         }
         selectedTile.setRowAndCol(-1, -1);
 
-        if (isValidMove) {
+        if (isValidMove && !showingAllMoves) {
             if (selectedPiece.getClass() == Pawn.class) {
                 if (targetPiece == null) stringBuilder.append(targetTile.getTileName()).append(" ");
                 else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
