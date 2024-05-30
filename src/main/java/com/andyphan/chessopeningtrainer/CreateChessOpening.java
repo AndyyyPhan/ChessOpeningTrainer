@@ -2,10 +2,7 @@ package com.andyphan.chessopeningtrainer;
 
 import com.andyphan.chess.Alliance;
 import com.andyphan.chess.ChessScene;
-import com.andyphan.chess.pieces.Bishop;
-import com.andyphan.chess.pieces.King;
-import com.andyphan.chess.pieces.Knight;
-import com.andyphan.chess.pieces.Pawn;
+import com.andyphan.chess.pieces.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
@@ -54,7 +51,9 @@ public class CreateChessOpening extends ChessScene {
             }
             if (selectedPiece.getClass() == Knight.class) firstHalf.append("N");
             else if (selectedPiece.getClass() == Bishop.class) firstHalf.append("B");
-            System.out.println(selectedPiece.getClass());
+            else if (selectedPiece.getClass() == Rook.class) firstHalf.append("R");
+            else if (selectedPiece.getClass() == Queen.class) firstHalf.append("Q");
+            else if (selectedPiece.getClass() == King.class) firstHalf.append("K");
 
             firstHalf.append(selectedTile.getTileName());
         }
@@ -116,7 +115,7 @@ public class CreateChessOpening extends ChessScene {
                     else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
                 }
             }
-            else if (selectedPiece.getClass() == Bishop.class) {
+            else if (selectedPiece.getClass() == Bishop.class || selectedPiece.getClass() == Queen.class || selectedPiece.getClass() == King.class) {
                 if (targetPiece == null) stringBuilder.append(firstHalf.toString().charAt(0)).append(targetTile.getTileName()).append(" ");
                 else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
             }
