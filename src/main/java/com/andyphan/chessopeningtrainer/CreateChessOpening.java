@@ -66,6 +66,7 @@ public class CreateChessOpening extends ChessScene {
         targetPiece = targetTile.getChessPiece();
         boolean isValidMove = false;
         boolean isOtherKnightMove = false;
+        boolean isOtherRookMove = false;
         if (selectedPiece != targetPiece && selectedPiece.isValidMove(targetTile)) {
             if (selectedPiece.getClass() == Knight.class) {
                 for (int row = 0; row < BOARD_SIZE; row++) {
@@ -76,6 +77,20 @@ public class CreateChessOpening extends ChessScene {
                                 chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Knight.class) {
                             if (chessBoard.getChessGridTileByName(row, col).getChessPiece().isValidMove(targetTile)) {
                                 isOtherKnightMove = true;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (selectedPiece.getClass() == Rook.class) {
+                for (int row = 0; row < BOARD_SIZE; row++) {
+                    for (int col=0; col < BOARD_SIZE; col++) {
+                        if ((selectedTile.getRow() != row && selectedTile.getCol() != col) &&
+                                chessBoard.getChessGridTileByName(row, col).getChessPiece() != null &&
+                                chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn() &&
+                                chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Rook.class) {
+                            if (chessBoard.getChessGridTileByName(row, col).getChessPiece().isValidMove(targetTile)) {
+                                isOtherRookMove = true;
                             }
                         }
                     }
@@ -104,23 +119,30 @@ public class CreateChessOpening extends ChessScene {
                 else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
             }
             else if (selectedPiece.getClass() == Knight.class) {
-                if (targetPiece == null) {
-                    {
-                        if (isOtherKnightMove) stringBuilder.append(firstHalf.substring(0, 2)).append(targetTile.getTileName()).append(" ");
-                        else stringBuilder.append(firstHalf.toString().charAt(0)).append(targetTile.getTileName()).append(" ");
-                    }
-                }
-                else {
-                    if (isOtherKnightMove) stringBuilder.append(firstHalf.substring(0, 2)).append("x").append(targetTile.getTileName()).append(" ");
-                    else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
-                }
+                isOtherMove(isOtherKnightMove);
             }
             else if (selectedPiece.getClass() == Bishop.class || selectedPiece.getClass() == Queen.class || selectedPiece.getClass() == King.class) {
                 if (targetPiece == null) stringBuilder.append(firstHalf.toString().charAt(0)).append(targetTile.getTileName()).append(" ");
                 else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
             }
+            else if (selectedPiece.getClass() == Rook.class) {
+                isOtherMove(isOtherRookMove);
+            }
             moves = stringBuilder.toString();
         }
         firstHalf.setLength(0);
+    }
+
+    private void isOtherMove(boolean chessPiece) {
+        if (targetPiece == null) {
+            {
+                if (chessPiece) stringBuilder.append(firstHalf.substring(0, 2)).append(targetTile.getTileName()).append(" ");
+                else stringBuilder.append(firstHalf.toString().charAt(0)).append(targetTile.getTileName()).append(" ");
+            }
+        }
+        else {
+            if (chessPiece) stringBuilder.append(firstHalf.substring(0, 2)).append("x").append(targetTile.getTileName()).append(" ");
+            else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
+        }
     }
 }
