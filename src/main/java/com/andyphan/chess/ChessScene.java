@@ -244,7 +244,7 @@ public class ChessScene extends Scene {
         selectedTile.resetTile();
     }
 
-    private void resetBoard() {
+    protected void resetBoard() {
         boolean wasFlipped = chessBoard.getFlipped();
         if (chessBoard.getFlipped()) flipBoard();
         Tile[][] chessGridCopy = new Tile[BOARD_SIZE][BOARD_SIZE];
@@ -265,7 +265,7 @@ public class ChessScene extends Scene {
         if (wasFlipped) flipBoard();
     }
 
-    private void displayAllMoves() {
+    protected void displayAllMoves() {
         resetBoard();
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
@@ -294,7 +294,7 @@ public class ChessScene extends Scene {
         timeline.play();
     }
 
-    private void playMove(String move) {
+    protected void playMove(String move) {
         if (move.contains("+")) move = move.substring(0, move.length()-1);
         Tile moveTile = new Tile(move);
         moveTile = chessBoard.getChessGridTileByName(moveTile.getRow(), moveTile.getCol());
