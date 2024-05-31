@@ -153,4 +153,12 @@ public class AllOpeningsMenu extends Scene {
 
         return listView;
     }
+
+    public static void setIsChessSceneOpen(boolean isChessSceneOpen) {
+        AllOpeningsMenu.isChessSceneOpen = isChessSceneOpen;
+    }
+
+    public static void setActiveChessScene(Stage activeChessScene) {
+        AllOpeningsMenu.activeChessScene = activeChessScene;
+    }
 }
