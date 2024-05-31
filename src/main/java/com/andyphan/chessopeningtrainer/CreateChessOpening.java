@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -35,13 +36,31 @@ public class CreateChessOpening extends ChessScene {
             moves = stringBuilder.toString();
             System.out.println(moves);
         });
+        Button reset = new Button("Reset");
+        reset.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Reset Moves");
+            alert.setHeaderText("Reset Moves");
+            alert.setContentText("You have reset all of your moves.");
+            alert.showAndWait();
+            resetBoard();
+            stringBuilder.setLength(0);
+            moves = stringBuilder.toString();
+            moveCounter = 1;
+        });
         Button exit = new Button("Exit");
-        layout.getChildren().addAll(new HBox(5, flipBoardButton, showAllMovesButton), new HBox(5, save, exit));
+        exit.setOnAction(e -> {
+            AllOpeningsMenu.setIsChessSceneOpen(false);
+            AllOpeningsMenu.setActiveChessScene(null);
+            Stage stage = (Stage) exit.getScene().getWindow();
+            stage.close();
+        });
+        layout.getChildren().addAll(new HBox(5, flipBoardButton, showAllMovesButton), new HBox(5, save, reset, exit));
     }
 
     @Override
     protected void displayAllMoves() {
-        if (this.moves == null) {
+        if (this.moves == null || this.moves.isBlank()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("No Moves");
             alert.setHeaderText("There are no moves in play.");
@@ -49,7 +68,6 @@ public class CreateChessOpening extends ChessScene {
             alert.showAndWait();
         }
         else {
-            System.out.println(this.moves);
             resetBoard();
             Timeline timeline = new Timeline();
             timeline.setCycleCount(1);
