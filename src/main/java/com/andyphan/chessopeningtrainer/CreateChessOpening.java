@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -21,6 +22,7 @@ public class CreateChessOpening extends ChessScene {
     private StringBuilder stringBuilder = new StringBuilder();
     private StringBuilder firstHalf = new StringBuilder();
     private int moveCounter = 1;
+    private boolean isValidSelection = false;
     private boolean showingAllMoves = false;
 
     public CreateChessOpening(ChessOpening chessOpening) {
@@ -35,6 +37,12 @@ public class CreateChessOpening extends ChessScene {
         save.setOnAction(e -> {
             moves = stringBuilder.toString();
             System.out.println(moves);
+
+            Stage saveStage = new Stage();
+            saveStage.initModality(Modality.WINDOW_MODAL);
+            saveStage.initOwner(SceneManager.getPrimaryStage());
+            saveStage.setScene(new SaveChessOpening(this));
+            saveStage.show();
         });
         Button reset = new Button("Reset");
         reset.setOnAction(e -> {
@@ -111,27 +119,12 @@ public class CreateChessOpening extends ChessScene {
     @Override
     protected void selectPiece(int col, int row) {
         selectedPiece = chessGrid[row][col].getChessPiece();
-        boolean isValidSelection = false;
         if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(row, col);
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
             selectedRow = row;
             selectedCol = col;
             isValidSelection = true;
-        }
-
-        if (isValidSelection && !showingAllMoves) {
-            if (playerTurn.getCurrentTurn() == Alliance.WHITE) {
-                stringBuilder.append(moveCounter).append(". ");
-                moveCounter++;
-            }
-            if (selectedPiece.getClass() == Knight.class) firstHalf.append("N");
-            else if (selectedPiece.getClass() == Bishop.class) firstHalf.append("B");
-            else if (selectedPiece.getClass() == Rook.class) firstHalf.append("R");
-            else if (selectedPiece.getClass() == Queen.class) firstHalf.append("Q");
-            else if (selectedPiece.getClass() == King.class) firstHalf.append("K");
-
-            firstHalf.append(selectedTile.getTileName());
         }
     }
 
@@ -172,6 +165,21 @@ public class CreateChessOpening extends ChessScene {
                     }
                 }
             }
+
+            if (isValidSelection && !showingAllMoves) {
+                if (playerTurn.getCurrentTurn() == Alliance.WHITE) {
+                    stringBuilder.append(moveCounter).append(". ");
+                    moveCounter++;
+                }
+                if (selectedPiece.getClass() == Knight.class) firstHalf.append("N");
+                else if (selectedPiece.getClass() == Bishop.class) firstHalf.append("B");
+                else if (selectedPiece.getClass() == Rook.class) firstHalf.append("R");
+                else if (selectedPiece.getClass() == Queen.class) firstHalf.append("Q");
+                else if (selectedPiece.getClass() == King.class) firstHalf.append("K");
+
+                firstHalf.append(selectedTile.getTileName());
+            }
+
             if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling()) {
                 handleCastling(targetRow, selectedPiece);
             }
@@ -220,5 +228,9 @@ public class CreateChessOpening extends ChessScene {
             if (chessPiece) stringBuilder.append(firstHalf.substring(0, 2)).append("x").append(targetTile.getTileName()).append(" ");
             else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
         }
+    }
+
+    public String getMoves() {
+        return moves;
     }
 }
