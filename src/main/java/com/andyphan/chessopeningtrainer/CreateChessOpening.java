@@ -35,7 +35,7 @@ public class CreateChessOpening extends ChessScene {
         layout.getChildren().removeAll(flipBoardButton, showAllMovesButton);
         Button save = new Button("Save");
         save.setOnAction(e -> {
-            moves = stringBuilder.toString();
+            moves = stringBuilder.toString().trim();
             System.out.println(moves);
 
             Stage saveStage = new Stage();
@@ -53,7 +53,7 @@ public class CreateChessOpening extends ChessScene {
             alert.showAndWait();
             resetBoard();
             stringBuilder.setLength(0);
-            moves = stringBuilder.toString();
+            moves = stringBuilder.toString().trim();
             moveCounter = 1;
         });
         Button exit = new Button("Exit");
@@ -212,7 +212,7 @@ public class CreateChessOpening extends ChessScene {
             else if (selectedPiece.getClass() == Rook.class) {
                 isOtherMove(isOtherRookMove);
             }
-            moves = stringBuilder.toString();
+            moves = stringBuilder.toString().trim();
         }
         firstHalf.setLength(0);
     }
