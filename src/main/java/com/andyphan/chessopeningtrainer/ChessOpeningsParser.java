@@ -7,10 +7,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChessOpeningsParser {
-    public String getJSONText() throws IOException{
+    public static String getJSONText() throws IOException{
         String filename = "src/main/resources/eco.json";
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
         StringBuilder stringBuilder = new StringBuilder();
@@ -21,7 +20,7 @@ public class ChessOpeningsParser {
         }
         return stringBuilder.toString();
     }
-    public ArrayList<ChessOpening> getAllChessOpenings() throws IOException {
+    public static ArrayList<ChessOpening> getAllChessOpenings() throws IOException {
         JSONArray jsonArray = new JSONArray(getJSONText());
         ArrayList<ChessOpening> allChessOpenings = new ArrayList<>();
         for (int i=0; i<jsonArray.length(); i++) {
@@ -40,5 +39,19 @@ public class ChessOpeningsParser {
             allChessOpeningNames.add(chessOpening.getName());
         }
         return allChessOpeningNames;
+    }
+
+    private static ArrayList<String> getAllCreatedFens() throws IOException {
+        ArrayList<String> allCreatedFens = new ArrayList<>();
+        for (ChessOpening chessOpening : getAllChessOpenings()) {
+            if (chessOpening.getFen().contains("CREATED")) {
+                allCreatedFens.add(chessOpening.getFen());
+            }
+        }
+        return allCreatedFens;
+    }
+
+    public static String getNextCreatedOpeningFen() throws IOException {
+        return "CREATED_" + getAllCreatedFens().size();
     }
 }
