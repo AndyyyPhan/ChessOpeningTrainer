@@ -11,7 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class SaveChessOpening extends Scene {
+    private DatabaseManager database = new DatabaseManager();
     public SaveChessOpening(CreateChessOpening createChessOpening) {
         super(new VBox(10), 400, 300);
         VBox layout = (VBox) getRoot();
@@ -31,7 +34,18 @@ public class SaveChessOpening extends Scene {
 
         Button confirm = new Button("Confirm");
         confirm.setOnAction(e -> {
-
+            ChessOpening chessOpening = new ChessOpening();
+            chessOpening.setFen(fenField.getText());
+            chessOpening.setName(nameField.getText());
+            chessOpening.setMoves(createChessOpening.getMoves());
+            try {
+//                database.addChessOpening(chessOpening);
+                ChessOpeningsWriter.addChessOpening(chessOpening);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            Stage stage = (Stage) confirm.getScene().getWindow();
+            stage.close();
         });
         confirm.setMinSize(30, 30);
         Button cancel = new Button("Cancel");
