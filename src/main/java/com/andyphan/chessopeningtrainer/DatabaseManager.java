@@ -4,6 +4,7 @@ import jakarta.persistence.PersistenceException;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -71,5 +72,16 @@ public class DatabaseManager {
             if (session.getTransaction() != null) session.getTransaction().rollback();
         }
         return chessOpenings;
+    }
+
+    public void addChessOpening(ChessOpening chessOpening) throws IOException {
+        if (chessOpening.getFen().isBlank()) chessOpening.setFen(ChessOpeningsParser.getNextCreatedOpeningFen());
+        session.beginTransaction();
+        try {
+            session.persist(chessOpening);
+            session.getTransaction().commit();
+        } catch (PersistenceException e) {
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+        }
     }
 }
