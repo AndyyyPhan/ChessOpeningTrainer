@@ -36,7 +36,6 @@ public class CreateChessOpening extends ChessScene {
         Button save = new Button("Save");
         save.setOnAction(e -> {
             moves = stringBuilder.toString().trim();
-            System.out.println(moves);
 
             Stage saveStage = new Stage();
             saveStage.initModality(Modality.WINDOW_MODAL);
