@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class ChessOpeningsWriter {
-    private final static String filename = "src/main/resources/ecoTest.json";
+    private final static String filename = "src/main/resources/eco.json";
     public static void addChessOpening(ChessOpening chessOpening) throws IOException {
         List<Map<String, Object>> existingOpenings = new ArrayList<>();
         try {
