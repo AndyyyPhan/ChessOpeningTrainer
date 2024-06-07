@@ -25,6 +25,7 @@ public class AllOpeningsMenu extends Scene {
     private FilteredList<ChessOpening> filteredOpenings;
     private static boolean isChessSceneOpen = false;
     private static Stage activeChessScene = null;
+    private Pagination pagination;
     public AllOpeningsMenu() throws IOException {
         super(new VBox(10), 800, 600);
         Label mainLabel = new Label("List of All Openings");
@@ -38,7 +39,7 @@ public class AllOpeningsMenu extends Scene {
         allChessOpenings = chessOpeningsParser.getAllChessOpenings();
         chessOpenings.addAll(allChessOpenings);
 
-        Pagination pagination = new Pagination(getPageCount(), 0);
+        pagination = new Pagination(getPageCount(), 0);
         pagination.setPageFactory(this::createPage);
 
         Label filterLabel = new Label("Search Chess Opening:");
@@ -160,5 +161,12 @@ public class AllOpeningsMenu extends Scene {
 
     public static void setActiveChessScene(Stage activeChessScene) {
         AllOpeningsMenu.activeChessScene = activeChessScene;
+    }
+
+    public void addToAllChessOpenings(ChessOpening chessOpening) {
+        allChessOpenings.add(chessOpening);
+        chessOpenings.add(chessOpening);
+        pagination.setPageFactory(this::createPage);
+        pagination.setPageCount(getNewPageCount());
     }
 }
