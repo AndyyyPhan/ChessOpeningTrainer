@@ -39,8 +39,9 @@ public class SaveChessOpening extends Scene {
             chessOpening.setName(nameField.getText());
             chessOpening.setMoves(createChessOpening.getMoves());
             try {
-//                database.addChessOpening(chessOpening);
                 ChessOpeningsWriter.addChessOpening(chessOpening);
+                ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
+                manageOpeningsMenu.getAllOpeningsMenu().addToAllChessOpenings(chessOpening);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
