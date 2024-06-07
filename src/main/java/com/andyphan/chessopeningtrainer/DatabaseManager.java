@@ -84,4 +84,34 @@ public class DatabaseManager {
             if (session.getTransaction() != null) session.getTransaction().rollback();
         }
     }
+
+    public boolean isChessOpeningExisting(ChessOpening chessOpening) {
+        ChessOpening existingChessOpening = session.createQuery("FROM ChessOpening WHERE fen = :fen", ChessOpening.class)
+                .setParameter("fen", chessOpening.getFen())
+                .uniqueResult();
+        return existingChessOpening != null;
+    }
+
+    public void deleteChessOpening(ChessOpening chessOpening) {
+        session.beginTransaction();
+        try {
+            session.createQuery("DELETE FROM ChessOpening WHERE fen = :fen AND name = :name AND moves = :moves")
+                    .setParameter("fen", chessOpening.getFen())
+                    .setParameter("name", chessOpening.getName())
+                    .setParameter("moves", chessOpening.getMoves())
+                    .executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (session.getTransaction() != null) session.getTransaction().rollback();
+        }
+    }
+
+    public ChessOpening getChessOpening(String fen, String name, String moves) {
+        return session.createQuery("FROM ChessOpening WHERE fen = :fen AND name = :name AND moves = :moves", ChessOpening.class)
+                .setParameter("fen", fen)
+                .setParameter("name", name)
+                .setParameter("moves", moves)
+                .uniqueResult();
+    }
 }
