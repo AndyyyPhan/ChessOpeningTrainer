@@ -22,6 +22,7 @@ public class ManageOpeningsMenu extends Scene {
     public void initialize() {
         database = new DatabaseManager();
     }
+    private AllOpeningsMenu allOpeningsMenu;
 
     public ManageOpeningsMenu(Player player) {
         super(new VBox(10), 800, 600);
@@ -49,6 +50,7 @@ public class ManageOpeningsMenu extends Scene {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+            allOpeningsMenu = (AllOpeningsMenu) allOpeningsStage.getScene();
             allOpeningsStage.show();
         });
 
@@ -60,5 +62,8 @@ public class ManageOpeningsMenu extends Scene {
 
         VBox layout = (VBox) getRoot();
         layout.getChildren().addAll(mainLabelContainer, table, allOpeningsContainer);
+    }
+    public AllOpeningsMenu getAllOpeningsMenu() {
+        return allOpeningsMenu;
     }
 }
