@@ -21,41 +21,41 @@ public class DatabaseManager {
         session.close();
     }
 
-    public boolean isPlayerExisting(String username) {
-        Player existingPlayer = session.createQuery("FROM Player WHERE username = :username", Player.class)
+    public boolean isUserExisting(String username) {
+        User existingUser = session.createQuery("FROM User WHERE username = :username", User.class)
                 .setParameter("username", username)
                 .uniqueResult();
-        return existingPlayer != null;
+        return existingUser != null;
     }
 
-    public boolean isValidPlayer(String username, String password) {
-        if (!isPlayerExisting(username)) return false;
+    public boolean isValidUser(String username, String password) {
+        if (!isUserExisting(username)) return false;
 
-        Player existingPlayer = session.createQuery("FROM Player WHERE username = :username", Player.class)
+        User existingUser = session.createQuery("FROM User WHERE username = :username", User.class)
                 .setParameter("username", username)
                 .uniqueResult();
-        return existingPlayer.getPassword().equals(password);
+        return existingUser.getPassword().equals(password);
     }
 
     public boolean validPasswordLength(String password) {
         return password.length() >= 8;
     }
 
-    public void addPlayer(String username, String password) {
+    public void addUser(String username, String password) {
         session.beginTransaction();
         try {
-            Player player = new Player();
-            player.setUsername(username);
-            player.setPassword(password);
-            session.persist(player);
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            session.persist(user);
             session.getTransaction().commit();
         } catch (PersistenceException e) {
             if (session.getTransaction() != null) session.getTransaction().rollback();
         }
     }
 
-    public Player getPlayer(String username) {
-        return session.createQuery("FROM Player WHERE username =:username", Player.class)
+    public User getUser(String username) {
+        return session.createQuery("FROM User WHERE username =:username", User.class)
                 .setParameter("username", username)
                 .uniqueResult();
     }
@@ -76,6 +76,8 @@ public class DatabaseManager {
 
     public void addChessOpening(ChessOpening chessOpening) throws IOException {
         if (chessOpening.getFen().isBlank()) chessOpening.setFen(ChessOpeningsParser.getNextCreatedOpeningFen());
+        User currentUser = UserManager.getCurrentUser();
+        chessOpening.setUser(currentUser);
         session.beginTransaction();
         try {
             session.persist(chessOpening);
