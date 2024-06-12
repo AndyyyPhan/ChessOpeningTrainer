@@ -26,6 +26,7 @@ public class AllOpeningsMenu extends Scene {
     private static boolean isChessSceneOpen = false;
     private static Stage activeChessScene = null;
     private Pagination pagination;
+    private ListView<ChessOpening> listView;
     public AllOpeningsMenu() throws IOException {
         super(new VBox(10), 800, 600);
         Label mainLabel = new Label("List of All Openings");
@@ -89,9 +90,18 @@ public class AllOpeningsMenu extends Scene {
         editOpeningLabel.setFont(new Font(15));
         Button editOpeningButton = new Button("Edit Opening");
 
+        Label addOpeningLabel = new Label("Click here to add a chess opening to practice:");
+        addOpeningLabel.setFont(new Font(15));
+        Button addOpeningButton = new Button("Add Opening");
+        addOpeningButton.setOnAction(e -> {
+            ChessOpening selectedChessOpening = listView.getSelectionModel().getSelectedItem();
+            System.out.println(selectedChessOpening.getName());
+        });
+
         VBox layout = (VBox) getRoot();
         layout.getChildren().addAll(mainLabelContainer, new HBox(5, filterLabel, filterField), pagination,
-                new HBox(5, createOpeningLabel, createOpeningButton), new HBox(5, editOpeningLabel, editOpeningButton));
+                new HBox(5, createOpeningLabel, createOpeningButton), new HBox(5, editOpeningLabel, editOpeningButton),
+                new HBox(5, addOpeningLabel, addOpeningButton));
     }
 
     private int getPageCount() {
@@ -110,6 +120,7 @@ public class AllOpeningsMenu extends Scene {
         ObservableList<ChessOpening> displayedChessOpenings = FXCollections.observableArrayList(
                 filteredOpenings.subList(fromIndex, toIndex));
         ListView<ChessOpening> listView = new ListView<>(displayedChessOpenings);
+        this.listView = listView;
         listView.setCellFactory(new Callback<ListView<ChessOpening>, ListCell<ChessOpening>>() {
             @Override
             public ListCell<ChessOpening> call(ListView<ChessOpening> param) {
