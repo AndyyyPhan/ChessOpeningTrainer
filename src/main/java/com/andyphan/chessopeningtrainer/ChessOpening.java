@@ -16,6 +16,8 @@ public class ChessOpening {
     private String moves;
     @Column(name = "name", nullable = false)
     private String name;
+    @ManyToOne
+    private User user;
 
     public int getId() {
         return id;
@@ -47,5 +49,13 @@ public class ChessOpening {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
