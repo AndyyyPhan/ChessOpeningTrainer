@@ -4,8 +4,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -15,7 +13,7 @@ public class MainMenu extends Scene {
         database = new DatabaseManager();
     }
 
-    public MainMenu(Player player) {
+    public MainMenu(User user) {
         super(new VBox(10), 400, 300);
         initialize();
 
@@ -28,11 +26,11 @@ public class MainMenu extends Scene {
         loginLayout.setAlignment(Pos.CENTER);
         loginLayout.getChildren().addAll(mainMenuLabel, practiceButton, manageOpeningsButton, logoutButton);
 
-        manageOpeningsButton.setOnAction(e -> SceneManager.setScene(new ManageOpeningsMenu(database.getPlayer(player.getUsername()))));
+        manageOpeningsButton.setOnAction(e -> SceneManager.setScene(new ManageOpeningsMenu(database.getUser(user.getUsername()))));
 
         logoutButton.setOnAction(e -> {
             SceneManager.setScene(new Login());
-            PlayerManager.setCurrentPlayer(null);
+            UserManager.setCurrentUser(null);
         });
     }
 }

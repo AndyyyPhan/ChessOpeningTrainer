@@ -11,7 +11,7 @@
         <property name="hibernate.hbm2ddl.auto" >update</property>
         <property name="hibernate.jdbc.use_get_generated_keys">false</property>
 
-        <mapping class="com.andyphan.chessopeningtrainer.Player" />
+        <mapping class="com.andyphan.chessopeningtrainer.User" />
         <mapping class="com.andyphan.chessopeningtrainer.ChessOpening" />
 
     </session-factory>

@@ -29,13 +29,13 @@ public class Login extends Scene {
             // Check username and password
             String username = usernameField.getText();
             String password = passwordField.getText();
-            if (database.isValidPlayer(username, password)) {
+            if (database.isValidUser(username, password)) {
                 // Successful login, transition to course search screen
-                Player player = new Player();
-                player.setUsername(username);
-                player.setPassword(password);
-                PlayerManager.setCurrentPlayer(player);
-                goToMainMenu(player);
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(password);
+                UserManager.setCurrentUser(user);
+                goToMainMenu(user);
             } else {
                 showAlert("Invalid credentials! Please try again.");
             }
@@ -47,12 +47,12 @@ public class Login extends Scene {
             String newPassword = passwordField.getText();
             if (newUsername.isEmpty() || newPassword.isEmpty()) {
                 showAlert("Please enter both username and password.");
-            } else if (database.isPlayerExisting(newUsername)) {
+            } else if (database.isUserExisting(newUsername)) {
                 showAlert("Username already exists. Please enter correct password or create a different user.");
             } else if (!database.validPasswordLength(newPassword)) {
                 showAlert("Please enter a password with at least 8 characters.");
             } else {
-                database.addPlayer(newUsername, newPassword);
+                database.addUser(newUsername, newPassword);
                 showSuccess("Successfully created account!");
             }
         });
@@ -62,8 +62,8 @@ public class Login extends Scene {
         });
     }
 
-    private void goToMainMenu(Player player) {
-        SceneManager.setScene(new MainMenu(player));
+    private void goToMainMenu(User user) {
+        SceneManager.setScene(new MainMenu(user));
     }
 
     private void showSuccess(String message) {

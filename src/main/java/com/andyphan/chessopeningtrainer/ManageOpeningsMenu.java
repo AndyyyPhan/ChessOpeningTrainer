@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Pagination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -24,7 +23,7 @@ public class ManageOpeningsMenu extends Scene {
     }
     private AllOpeningsMenu allOpeningsMenu;
 
-    public ManageOpeningsMenu(Player player) {
+    public ManageOpeningsMenu(User user) {
         super(new VBox(10), 800, 600);
         initialize();
 
