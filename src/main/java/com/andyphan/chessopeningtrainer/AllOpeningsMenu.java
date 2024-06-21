@@ -27,6 +27,7 @@ public class AllOpeningsMenu extends Scene {
     private static Stage activeChessScene = null;
     private Pagination pagination;
     private ListView<ChessOpening> listView;
+    private DatabaseManager database = DatabaseManager.getInstance();
     public AllOpeningsMenu() throws IOException {
         super(new VBox(10), 800, 600);
         Label mainLabel = new Label("List of All Openings");
@@ -95,7 +96,12 @@ public class AllOpeningsMenu extends Scene {
         Button addOpeningButton = new Button("Add Opening");
         addOpeningButton.setOnAction(e -> {
             ChessOpening selectedChessOpening = listView.getSelectionModel().getSelectedItem();
+            database.persistChessOpening(selectedChessOpening);
+            database.addChessOpeningToPractice(selectedChessOpening);
+            ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
+            manageOpeningsMenu.getListView().getItems().add(selectedChessOpening);
             System.out.println(selectedChessOpening.getName());
+            System.out.println(database.getOpeningsInPractice());
         });
 
         VBox layout = (VBox) getRoot();
@@ -121,21 +127,12 @@ public class AllOpeningsMenu extends Scene {
                 filteredOpenings.subList(fromIndex, toIndex));
         ListView<ChessOpening> listView = new ListView<>(displayedChessOpenings);
         this.listView = listView;
-        listView.setCellFactory(new Callback<ListView<ChessOpening>, ListCell<ChessOpening>>() {
+        listView.setCellFactory(param -> new ListCell<>() {
             @Override
-            public ListCell<ChessOpening> call(ListView<ChessOpening> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(ChessOpening item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                        }
-                        else {
-                            setText(item.getName());
-                        }
-                    }
-                };
+            protected void updateItem(ChessOpening item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) setText(null);
+                else setText(item.getName());
             }
         });
 
