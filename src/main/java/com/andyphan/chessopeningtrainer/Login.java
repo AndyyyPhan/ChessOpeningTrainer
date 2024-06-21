@@ -6,13 +6,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Login extends Scene {
-    private DatabaseManager database;
-    public void initialize() {
-        database = new DatabaseManager();
-    }
+    private DatabaseManager database = DatabaseManager.getInstance();
     public Login() {
         super(new VBox(10), 400, 300);
-        initialize();
 
         VBox loginLayout = (VBox) getRoot();
         Label usernameLabel = new Label("Username:");
@@ -34,8 +30,9 @@ public class Login extends Scene {
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
-                UserManager.setCurrentUser(user);
+//                UserManager.setCurrentUser(user);
                 goToMainMenu(user);
+                System.out.println(database.loginUser(username, password));
             } else {
                 showAlert("Invalid credentials! Please try again.");
             }

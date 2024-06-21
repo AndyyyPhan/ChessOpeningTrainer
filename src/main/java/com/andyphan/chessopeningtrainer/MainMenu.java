@@ -8,14 +8,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
-    private DatabaseManager database;
-    public void initialize() {
-        database = new DatabaseManager();
-    }
+    private DatabaseManager database = DatabaseManager.getInstance();
 
     public MainMenu(User user) {
         super(new VBox(10), 400, 300);
-        initialize();
 
         Label mainMenuLabel = new Label("Main Menu");
         mainMenuLabel.setFont(new Font(20));
