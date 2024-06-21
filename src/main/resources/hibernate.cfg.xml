@@ -6,13 +6,14 @@
 
         <property name="connection.driver_class">org.sqlite.JDBC</property>
 
-        <property name="connection.url">jdbc:sqlite:players.sqlite3</property>
+        <property name="connection.url">jdbc:sqlite:database.sqlite3</property>
 
         <property name="hibernate.hbm2ddl.auto" >update</property>
         <property name="hibernate.jdbc.use_get_generated_keys">false</property>
 
         <mapping class="com.andyphan.chessopeningtrainer.User" />
         <mapping class="com.andyphan.chessopeningtrainer.ChessOpening" />
+        <mapping class="com.andyphan.chessopeningtrainer.ActiveChessOpening" />
 
     </session-factory>
 </hibernate-configuration>
