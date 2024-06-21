@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -17,15 +18,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ManageOpeningsMenu extends Scene {
-    private DatabaseManager database;
-    public void initialize() {
-        database = new DatabaseManager();
-    }
+    private DatabaseManager database = DatabaseManager.getInstance();
     private AllOpeningsMenu allOpeningsMenu;
+    private ListView<ChessOpening> listView;
 
     public ManageOpeningsMenu(User user) {
         super(new VBox(10), 800, 600);
-        initialize();
 
         Label mainLabel = new Label("List of Openings in Practice");
         mainLabel.setFont(new Font(20));
@@ -53,16 +51,26 @@ public class ManageOpeningsMenu extends Scene {
             allOpeningsStage.show();
         });
 
-        ListView<ChessOpening> table = new ListView<>();
+        listView = new ListView<>();
         ObservableList<ChessOpening> chessOpenings = FXCollections.observableArrayList();
         chessOpenings.addAll(database.getOpeningsInPractice());
-
-        table.setItems(chessOpenings);
+        listView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(ChessOpening item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) setText(null);
+                 else setText(item.getName());
+            }
+        });
+        listView.setItems(chessOpenings);
 
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(mainLabelContainer, table, allOpeningsContainer);
+        layout.getChildren().addAll(mainLabelContainer, listView, allOpeningsContainer);
     }
     public AllOpeningsMenu getAllOpeningsMenu() {
         return allOpeningsMenu;
+    }
+    public ListView<ChessOpening> getListView() {
+        return listView;
     }
 }
