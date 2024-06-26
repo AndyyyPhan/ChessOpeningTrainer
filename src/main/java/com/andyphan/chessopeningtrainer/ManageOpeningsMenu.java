@@ -1,13 +1,11 @@
 package com.andyphan.chessopeningtrainer;
 
+import com.andyphan.chess.ChessScene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -21,6 +19,8 @@ public class ManageOpeningsMenu extends Scene {
     private DatabaseManager database = DatabaseManager.getInstance();
     private AllOpeningsMenu allOpeningsMenu;
     private ListView<ChessOpening> listView;
+    private static boolean isChessSceneOpen = false;
+    private static Stage activeChessScene = null;
 
     public ManageOpeningsMenu(User user) {
         super(new VBox(10), 800, 600);
@@ -63,6 +63,29 @@ public class ManageOpeningsMenu extends Scene {
             }
         });
         listView.setItems(chessOpenings);
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && isChessSceneOpen) {
+                activeChessScene.toFront();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Chess Scene Active");
+                alert.setHeaderText("A chess scene is currently active");
+                alert.setContentText("Please close active chess scene before opening a new one.");
+                alert.showAndWait();
+            }
+            else if (event.getClickCount() == 2) {
+                Stage chessStage = new Stage();
+                isChessSceneOpen = true;
+                activeChessScene = chessStage;
+                chessStage.initModality(Modality.WINDOW_MODAL);
+                chessStage.initOwner(SceneManager.getPrimaryStage());
+                chessStage.setScene(new ChessScene(listView.getSelectionModel().getSelectedItem()));
+                chessStage.setOnCloseRequest(event1 -> {
+                    isChessSceneOpen = false;
+                    activeChessScene = null;
+                });
+                chessStage.show();
+            }
+        });
 
         VBox layout = (VBox) getRoot();
         layout.getChildren().addAll(mainLabelContainer, listView, allOpeningsContainer);
