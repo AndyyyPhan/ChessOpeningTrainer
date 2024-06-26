@@ -87,7 +87,6 @@ public class DatabaseManager {
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             User currentUser = session.get(User.class, UserManager.getCurrentUser().getId());
-            System.out.println(currentUser.getUsername());
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<ActiveChessOpening> criteriaQuery = criteriaBuilder.createQuery(ActiveChessOpening.class);
             Root<ActiveChessOpening> root = criteriaQuery.from(ActiveChessOpening.class);
@@ -108,9 +107,17 @@ public class DatabaseManager {
     public void persistChessOpening(ChessOpening chessOpening) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()){
-            transaction = session.beginTransaction();
-            session.persist(chessOpening);
-            transaction.commit();
+            ChessOpening existingOpening = session.createQuery("FROM ChessOpening WHERE fen = :fen", ChessOpening.class)
+                    .setParameter("fen", chessOpening.getFen())
+                    .uniqueResult();
+            if (existingOpening == null) {
+                transaction = session.beginTransaction();
+                session.persist(chessOpening);
+                transaction.commit();
+            }
+            else {
+                chessOpening.setId(existingOpening.getId());
+            }
         } catch (PersistenceException e) {
             if (transaction != null) transaction.rollback();
         }
@@ -123,12 +130,10 @@ public class DatabaseManager {
             User currentUser = session.get(User.class, UserManager.getCurrentUser().getId());
             ChessOpening persistentChessOpening = session.get(ChessOpening.class, chessOpening.getId());
 
-            if (!isChessOpeningInPractice(persistentChessOpening)) {
-                ActiveChessOpening activeChessOpening = new ActiveChessOpening();
-                activeChessOpening.setUser(currentUser);
-                activeChessOpening.setChessOpening(persistentChessOpening);
-                session.persist(activeChessOpening);
-            }
+            ActiveChessOpening activeChessOpening = new ActiveChessOpening();
+            activeChessOpening.setUser(currentUser);
+            activeChessOpening.setChessOpening(persistentChessOpening);
+            session.persist(activeChessOpening);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,7 +141,7 @@ public class DatabaseManager {
         }
     }
 
-    private boolean isChessOpeningInPractice(ChessOpening chessOpening) {
+    public boolean isChessOpeningInPractice(ChessOpening chessOpening) {
         boolean isInPractice = false;
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -210,7 +215,7 @@ public class DatabaseManager {
 //                .uniqueResult();
 //    }
 //
-    public boolean loginUser(String username, String password) {
+    public void loginUser(String username, String password) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
@@ -229,15 +234,12 @@ public class DatabaseManager {
                 UserManager.setCurrentUser(user);
                 System.out.println("User logged in: " + user.getUsername());
                 session.getTransaction().commit();
-                return true;
             } else {
                 System.out.println("Invalid login credentials.");
-                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
             if (transaction != null) transaction.rollback();
-            return false;
         }
     }
 }
