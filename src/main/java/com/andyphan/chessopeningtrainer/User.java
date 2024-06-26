@@ -14,8 +14,8 @@ public class User {
     private String username;
     @Column(name = "Password", nullable = false)
     private String password;
-    @OneToMany(mappedBy = "user")
-    private List<ChessOpening> chessOpenings;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ActiveChessOpening> activeChessOpenings;
 
     public int getId() {
         return id;
@@ -41,11 +41,11 @@ public class User {
         this.password = password;
     }
 
-    public List<ChessOpening> getChessOpenings() {
-        return chessOpenings;
+    public List<ActiveChessOpening> getActiveChessOpenings() {
+        return activeChessOpenings;
     }
 
-    public void setChessOpenings(List<ChessOpening> chessOpenings) {
-        this.chessOpenings = chessOpenings;
+    public void setChessOpenings(List<ActiveChessOpening> activeChessOpenings) {
+        this.activeChessOpenings = activeChessOpenings;
     }
 }
