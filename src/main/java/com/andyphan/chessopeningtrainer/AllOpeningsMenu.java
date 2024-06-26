@@ -97,11 +97,11 @@ public class AllOpeningsMenu extends Scene {
         addOpeningButton.setOnAction(e -> {
             ChessOpening selectedChessOpening = listView.getSelectionModel().getSelectedItem();
             database.persistChessOpening(selectedChessOpening);
-            database.addChessOpeningToPractice(selectedChessOpening);
-            ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
-            manageOpeningsMenu.getListView().getItems().add(selectedChessOpening);
-            System.out.println(selectedChessOpening.getName());
-            System.out.println(database.getOpeningsInPractice());
+            if (!database.isChessOpeningInPractice(selectedChessOpening)) {
+                database.addChessOpeningToPractice(selectedChessOpening);
+                ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
+                manageOpeningsMenu.getListView().getItems().add(selectedChessOpening);
+            }
         });
 
         VBox layout = (VBox) getRoot();
