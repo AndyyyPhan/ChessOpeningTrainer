@@ -22,23 +22,19 @@ public class Login extends Scene {
         loginLayout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField, loginButton, createButton, closeButton);
 
         loginButton.setOnAction(e -> {
-            // Check username and password
             String username = usernameField.getText();
             String password = passwordField.getText();
             if (database.isValidUser(username, password)) {
-                // Successful login, transition to course search screen
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
-//                UserManager.setCurrentUser(user);
                 goToMainMenu(user);
-                System.out.println(database.loginUser(username, password));
+                database.loginUser(username, password);
             } else {
                 showAlert("Invalid credentials! Please try again.");
             }
         });
 
-        // Set create button action
         createButton.setOnAction(e -> {
             String newUsername = usernameField.getText();
             String newPassword = passwordField.getText();
