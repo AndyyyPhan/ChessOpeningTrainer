@@ -35,17 +35,14 @@ public class SaveChessOpening extends Scene {
         Button confirm = new Button("Confirm");
         confirm.setOnAction(e -> {
             ChessOpening chessOpening = new ChessOpening();
+            if (fenField.getText().isBlank()) fenField.setText(database.getNextCreatedOpeningFen());
             chessOpening.setFen(fenField.getText());
             chessOpening.setName(nameField.getText());
             chessOpening.setMoves(createChessOpening.getMoves());
-            try {
-                database.addChessOpening(chessOpening);
-//                ChessOpeningsWriter.addChessOpening(chessOpening);
-//                ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
-//                manageOpeningsMenu.getAllOpeningsMenu().addToAllChessOpenings(chessOpening);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            database.persistChessOpening(chessOpening);
+            database.saveChessOpening(chessOpening);
+            ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
+            manageOpeningsMenu.getAllOpeningsMenu().addToAllChessOpenings(chessOpening);
             Stage stage = (Stage) confirm.getScene().getWindow();
             stage.close();
         });
