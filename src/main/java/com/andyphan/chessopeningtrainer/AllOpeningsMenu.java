@@ -40,6 +40,7 @@ public class AllOpeningsMenu extends Scene {
         ChessOpeningsParser chessOpeningsParser = new ChessOpeningsParser();
         allChessOpenings = chessOpeningsParser.getAllChessOpenings();
         chessOpenings.addAll(allChessOpenings);
+        chessOpenings.addAll(database.getUserChessOpenings());
 
         pagination = new Pagination(getPageCount(), 0);
         pagination.setPageFactory(this::createPage);
@@ -172,7 +173,6 @@ public class AllOpeningsMenu extends Scene {
     }
 
     public void addToAllChessOpenings(ChessOpening chessOpening) {
-        allChessOpenings.add(chessOpening);
         chessOpenings.add(chessOpening);
         pagination.setPageFactory(this::createPage);
         pagination.setPageCount(getNewPageCount());
