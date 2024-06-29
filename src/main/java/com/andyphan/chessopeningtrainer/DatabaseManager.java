@@ -170,6 +170,71 @@ public class DatabaseManager {
         return isInPractice;
     }
 
+    public void saveChessOpening(ChessOpening chessOpening) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            transaction = session.beginTransaction();
+            User currentUser = session.get(User.class, UserManager.getCurrentUser().getId());
+            ChessOpening persistentChessOpening = session.get(ChessOpening.class, chessOpening.getId());
+
+            UserChessOpening userChessOpening = new UserChessOpening();
+            userChessOpening.setUser(currentUser);
+            userChessOpening.setChessOpening(persistentChessOpening);
+            session.persist(userChessOpening);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) transaction.rollback();
+        }
+    }
+
+    public List<ChessOpening> getUserChessOpenings() {
+        List<ChessOpening> userChessOpenings = Collections.emptyList();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            User currentUser = session.get(User.class, UserManager.getCurrentUser().getId());
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<UserChessOpening> criteriaQuery = criteriaBuilder.createQuery(UserChessOpening.class);
+            Root<UserChessOpening> root = criteriaQuery.from(UserChessOpening.class);
+            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("user"), currentUser));
+            TypedQuery<UserChessOpening> typedQuery = session.createQuery(criteriaQuery);
+            List<UserChessOpening> userChessOpeningList = typedQuery.getResultList();
+            userChessOpenings = userChessOpeningList.stream()
+                    .map(UserChessOpening::getChessOpening)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) transaction.rollback();
+        }
+        return userChessOpenings;
+    }
+
+    public String getNextCreatedOpeningFen() {
+        return "CREATED_" + countUserChessOpenings();
+    }
+
+    private long countUserChessOpenings() {
+        long count = 0;
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            User user = session.get(User.class, UserManager.getCurrentUser().getId());
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<UserChessOpening> root = criteriaQuery.from(UserChessOpening.class);
+            criteriaQuery.select(criteriaBuilder.count(root));
+            criteriaQuery.where(criteriaBuilder.equal(root.get("user"), user));
+            TypedQuery<Long> query = session.createQuery(criteriaQuery);
+            count = query.getSingleResult();
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) transaction.rollback();
+        }
+        return count;
+    }
+
 //    public void addChessOpening(ChessOpening chessOpening) throws IOException {
 //        Transaction transaction = null;
 //        try (Session session = sessionFactory.openSession()) {
