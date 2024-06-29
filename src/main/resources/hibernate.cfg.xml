@@ -14,6 +14,7 @@
         <mapping class="com.andyphan.chessopeningtrainer.User" />
         <mapping class="com.andyphan.chessopeningtrainer.ChessOpening" />
         <mapping class="com.andyphan.chessopeningtrainer.ActiveChessOpening" />
+        <mapping class="com.andyphan.chessopeningtrainer.UserChessOpening" />
 
     </session-factory>
 </hibernate-configuration>
