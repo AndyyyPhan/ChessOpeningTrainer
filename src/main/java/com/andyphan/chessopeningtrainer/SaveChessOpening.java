@@ -43,8 +43,12 @@ public class SaveChessOpening extends Scene {
             database.saveChessOpening(chessOpening);
             ManageOpeningsMenu manageOpeningsMenu = (ManageOpeningsMenu) SceneManager.getPrimaryStage().getScene();
             manageOpeningsMenu.getAllOpeningsMenu().addToAllChessOpenings(chessOpening);
-            Stage stage = (Stage) confirm.getScene().getWindow();
-            stage.close();
+            Stage confirmingStage = (Stage) confirm.getScene().getWindow();
+            Stage chessOpeningStage = (Stage) createChessOpening.getRoot().getScene().getWindow();
+            confirmingStage.close();
+            chessOpeningStage.close();
+            AllOpeningsMenu.setIsChessSceneOpen(false);
+            AllOpeningsMenu.setActiveChessScene(null);
         });
         confirm.setMinSize(30, 30);
         Button cancel = new Button("Cancel");
