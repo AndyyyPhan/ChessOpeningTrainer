@@ -34,9 +34,14 @@ public class ManageOpeningsMenu extends Scene {
 
         Label allOpeningsLabel = new Label("Click here to show all openings: ");
         allOpeningsLabel.setFont(new Font(15));
+        Label backLabel = new Label("Click here to go back to Main Menu: ");
+        backLabel.setFont(new Font(15));
         Button allOpeningsButton = new Button("All Openings");
         allOpeningsButton.setFont(new Font(12));
+        Button backButton = new Button("Back");
+        backButton.setFont(new Font(12));
         HBox allOpeningsContainer = new HBox(5, allOpeningsLabel, allOpeningsButton);
+        HBox backContainer = new HBox(5, backLabel, backButton);
 
         allOpeningsButton.setOnAction(e -> {
             Stage allOpeningsStage = new Stage();
@@ -50,6 +55,8 @@ public class ManageOpeningsMenu extends Scene {
             allOpeningsMenu = (AllOpeningsMenu) allOpeningsStage.getScene();
             allOpeningsStage.show();
         });
+
+        backButton.setOnAction(e -> SceneManager.setScene(new MainMenu(user)));
 
         listView = new ListView<>();
         ObservableList<ChessOpening> chessOpenings = FXCollections.observableArrayList();
@@ -88,7 +95,7 @@ public class ManageOpeningsMenu extends Scene {
         });
 
         VBox layout = (VBox) getRoot();
-        layout.getChildren().addAll(mainLabelContainer, listView, allOpeningsContainer);
+        layout.getChildren().addAll(mainLabelContainer, listView, allOpeningsContainer, backContainer);
     }
     public AllOpeningsMenu getAllOpeningsMenu() {
         return allOpeningsMenu;
