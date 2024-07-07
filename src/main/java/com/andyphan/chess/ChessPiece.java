@@ -46,4 +46,5 @@ public abstract class ChessPiece extends ImageView {
         return imageName;
     }
     public abstract boolean isValidMove(Tile targetTile);
+    public abstract boolean isCheck();
 }
