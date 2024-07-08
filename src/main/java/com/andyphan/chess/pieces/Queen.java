@@ -23,4 +23,15 @@ public class Queen extends ChessPiece {
         rook.setAlliance(getAlliance());
         return bishop.isValidMove(targetTile) || rook.isValidMove(targetTile);
     }
+
+    @Override
+    public boolean isCheck() {
+        Bishop bishop = new Bishop(chessBoard, getImageName());
+        bishop.setTile(getTile());
+        bishop.setAlliance(getAlliance());
+        Rook rook = new Rook(chessBoard, getImageName());
+        rook.setTile(getTile());
+        rook.setAlliance(getAlliance());
+        return bishop.isCheck() || rook.isCheck();
+    }
 }
