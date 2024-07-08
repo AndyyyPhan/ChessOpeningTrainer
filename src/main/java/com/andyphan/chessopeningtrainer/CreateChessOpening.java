@@ -211,6 +211,10 @@ public class CreateChessOpening extends ChessScene {
             else if (selectedPiece.getClass() == Rook.class) {
                 isOtherMove(isOtherRookMove);
             }
+            if (selectedPiece.isCheck()) {
+                stringBuilder.setLength(stringBuilder.length() - 1);
+                stringBuilder.append("+").append(" ");
+            }
             moves = stringBuilder.toString().trim();
         }
         firstHalf.setLength(0);
