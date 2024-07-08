@@ -59,6 +59,11 @@ public class King extends ChessPiece {
         return false;
     }
 
+    @Override
+    public boolean isCheck() {
+        return false;
+    }
+
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
