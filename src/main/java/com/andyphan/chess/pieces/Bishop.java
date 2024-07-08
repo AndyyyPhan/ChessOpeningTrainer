@@ -56,4 +56,46 @@ public class Bishop extends ChessPiece {
         }
         return false;
     }
+
+    @Override
+    public boolean isCheck() {
+        boolean isTopLeft = false;
+        boolean isTopRight = false;
+        boolean isBotLeft = false;
+        boolean isBotRight = false;
+
+        // Top-Left Check Tile
+        Tile possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getRow() - 1 >= 0 && possibleCheckTile.getCol() - 1 >= 0) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() - 1, possibleCheckTile.getCol() - 1);
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            else if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+            possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isTopLeft = true;
+        }
+        // Top-Right Check Tile
+        possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getRow() - 1 >= 0 && possibleCheckTile.getCol() + 1 < BOARD_SIZE) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() - 1, possibleCheckTile.getCol() + 1);
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isTopRight = true;
+        }
+        // Bottom-Left Check Tile
+        possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getRow() + 1 < BOARD_SIZE && possibleCheckTile.getCol() - 1 >= 0) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() + 1, possibleCheckTile.getCol() - 1);
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isBotLeft = true;
+        }
+        // Bottom-Right Check Tile
+        possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getRow() + 1 < BOARD_SIZE && possibleCheckTile.getCol() + 1 < BOARD_SIZE) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() + 1, possibleCheckTile.getCol() + 1);
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isBotRight = true;
+        }
+        return isTopLeft || isTopRight || isBotLeft || isBotRight;
+    }
 }
