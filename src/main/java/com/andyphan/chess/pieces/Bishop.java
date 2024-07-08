@@ -68,7 +68,7 @@ public class Bishop extends ChessPiece {
         Tile possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
         while (possibleCheckTile.getRow() - 1 >= 0 && possibleCheckTile.getCol() - 1 >= 0) {
             possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() - 1, possibleCheckTile.getCol() - 1);
-            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
             else if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
             possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isTopLeft = true;
         }
@@ -76,7 +76,7 @@ public class Bishop extends ChessPiece {
         possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
         while (possibleCheckTile.getRow() - 1 >= 0 && possibleCheckTile.getCol() + 1 < BOARD_SIZE) {
             possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() - 1, possibleCheckTile.getCol() + 1);
-            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
             if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
                     possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isTopRight = true;
         }
@@ -84,7 +84,7 @@ public class Bishop extends ChessPiece {
         possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
         while (possibleCheckTile.getRow() + 1 < BOARD_SIZE && possibleCheckTile.getCol() - 1 >= 0) {
             possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() + 1, possibleCheckTile.getCol() - 1);
-            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
             if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
                     possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isBotLeft = true;
         }
@@ -92,7 +92,7 @@ public class Bishop extends ChessPiece {
         possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
         while (possibleCheckTile.getRow() + 1 < BOARD_SIZE && possibleCheckTile.getCol() + 1 < BOARD_SIZE) {
             possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() + 1, possibleCheckTile.getCol() + 1);
-            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) return false;
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
             if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
                     possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isBotRight = true;
         }
