@@ -55,6 +55,48 @@ public class Rook extends ChessPiece {
         return false;
     }
 
+    @Override
+    public boolean isCheck() {
+        boolean isUp = false;
+        boolean isDown = false;
+        boolean isLeft = false;
+        boolean isRight = false;
+
+        // Up Check Tile
+        Tile possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getRow() - 1 >= 0) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() - 1, possibleCheckTile.getCol());
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
+            else if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isUp = true;
+        }
+        // Down Check Tile
+        possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getRow() + 1 < BOARD_SIZE) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow() + 1, possibleCheckTile.getCol());
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
+            else if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isDown = true;
+        }
+        // Left Check Tile
+        possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getCol() - 1 >= 0) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow(), possibleCheckTile.getCol() - 1);
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
+            else if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isLeft = true;
+        }
+        // Right Check Tile
+        possibleCheckTile = chessBoard.getChessGridTileByName(getRow(), getCol());
+        while (possibleCheckTile.getCol() + 1 < BOARD_SIZE) {
+            possibleCheckTile = chessBoard.getChessGridTileByName(possibleCheckTile.getRow(), possibleCheckTile.getCol() + 1);
+            if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() != King.class) break;
+            else if (possibleCheckTile.getChessPiece() != null && possibleCheckTile.getChessPiece().getClass() == King.class &&
+                    possibleCheckTile.getChessPiece().getAlliance() != getAlliance()) isRight = true;
+        }
+        return isUp || isDown || isLeft || isRight;
+    }
+
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
