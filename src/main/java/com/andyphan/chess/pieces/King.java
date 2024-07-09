@@ -7,7 +7,10 @@ import com.andyphan.chess.Tile;
 
 public class King extends ChessPiece {
     private boolean hasMoved = false;
-    private boolean castling = false;
+    private boolean hasCastled = false;
+    private boolean isCastling = false;
+    private boolean longCastled = false;
+    private boolean shortCastled = false;
 
     public King(ChessBoard chessBoard, String imagePath) {
         super(chessBoard, imagePath);
@@ -73,10 +76,34 @@ public class King extends ChessPiece {
     }
 
     public boolean isCastling() {
-        return castling;
+        return isCastling;
     }
 
     public void setCastling(boolean castling) {
-        this.castling = castling;
+        this.isCastling = castling;
+    }
+
+    public boolean isLongCastled() {
+        return longCastled;
+    }
+
+    public void setLongCastled(boolean longCastled) {
+        this.longCastled = longCastled;
+    }
+
+    public boolean isShortCastled() {
+        return shortCastled;
+    }
+
+    public void setShortCastled(boolean shortCastled) {
+        this.shortCastled = shortCastled;
+    }
+
+    public boolean hasCastled() {
+        return hasCastled;
+    }
+
+    public void setHasCastled(boolean hasCastled) {
+        this.hasCastled = hasCastled;
     }
 }
