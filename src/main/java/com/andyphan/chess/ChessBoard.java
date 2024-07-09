@@ -71,7 +71,7 @@ public class ChessBoard extends GridPane {
         isFlipped = flipped;
     }
 
-    protected boolean getFlipped() {
+    public boolean getFlipped() {
         return isFlipped;
     }
     public Tile[][] getChessGrid() {
