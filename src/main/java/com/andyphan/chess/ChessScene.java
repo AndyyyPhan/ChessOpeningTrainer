@@ -72,7 +72,7 @@ public class ChessScene extends Scene {
         targetTile = chessGrid[targetRow][targetCol];
         targetPiece = targetTile.getChessPiece();
         if (selectedPiece != targetPiece && selectedPiece.isValidMove(targetTile)) {
-            if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling()) {
+            if (selectedPiece.getClass() == King.class && ((King) selectedPiece).isCastling() && !((King) selectedPiece).hasCastled()) {
                 handleCastling(targetRow, selectedPiece);
             }
             else {
@@ -149,6 +149,7 @@ public class ChessScene extends Scene {
                     chessBoard.add(selectedPiece, 5, targetRow);
                     chessBoard.add(targetPiece, 4, targetRow);
                 }
+                ((King) selectedPiece).setLongCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 2));
                 targetPiece.setTile(chessBoard.getChessGridTileByName(7, 3));
             } else if (targetTile.getTileName().equals("h1")) {
@@ -163,6 +164,7 @@ public class ChessScene extends Scene {
                     chessBoard.add(selectedPiece, 1, targetRow);
                     chessBoard.add(targetPiece, 2, targetRow);
                 }
+                ((King) selectedPiece).setShortCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 6));
                 targetPiece.setTile(chessBoard.getChessGridTileByName(7, 5));
             }
@@ -180,6 +182,7 @@ public class ChessScene extends Scene {
                     chessBoard.add(selectedPiece, 5, targetRow);
                     chessBoard.add(targetPiece, 4, targetRow);
                 }
+                ((King) selectedPiece).setLongCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(0, 2));
                 targetPiece.setTile(chessBoard.getChessGridTileByName(0, 3));
             } else if (targetTile.getTileName().equals("h8")) {
@@ -194,11 +197,14 @@ public class ChessScene extends Scene {
                     chessBoard.add(selectedPiece, 1, targetRow);
                     chessBoard.add(targetPiece, 2, targetRow);
                 }
+                ((King) selectedPiece).setShortCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(0, 6));
                 targetPiece.setTile(chessBoard.getChessGridTileByName(0, 5));
             }
         }
         ((King) selectedPiece).setHasMoved(true);
+        ((King) selectedPiece).setHasCastled(true);
+        ((King) selectedPiece).setCastling(false);
         ((Rook) targetPiece).setHasMoved(true);
         playerTurn.setNextTurn();
     }
