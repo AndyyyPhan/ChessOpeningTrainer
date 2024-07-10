@@ -197,8 +197,6 @@ public class CreateChessOpening extends ChessScene {
         selectedTile.setRowAndCol(-1, -1);
 
         if (isValidMove && !showingAllMoves) {
-            System.out.println(selectedPiece.getClass());
-            if (selectedPiece.getClass() == King.class) System.out.println(((King) selectedPiece).isCastling());
             if (selectedPiece.getClass() == Pawn.class) {
                 if (targetPiece == null) stringBuilder.append(targetTile.getTileName()).append(" ");
                 else stringBuilder.append(firstHalf.toString().charAt(0)).append("x").append(targetTile.getTileName()).append(" ");
@@ -225,8 +223,6 @@ public class CreateChessOpening extends ChessScene {
             }
             moves = stringBuilder.toString().trim();
         }
-        System.out.println(stringBuilder.toString());
-        System.out.println(firstHalf);
         firstHalf.setLength(0);
     }
 
