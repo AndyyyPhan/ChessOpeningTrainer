@@ -189,7 +189,7 @@ public class CreateChessOpening extends ChessScene {
                 selectedTile.resetTile();
                 if (targetPiece != null) chessBoard.getChildren().remove(targetPiece);
                 targetTile.setChessPiece(selectedPiece);
-                chessBoard.add(selectedPiece, targetCol, targetRow);
+                chessBoard.add(selectedPiece, targetCol + 1, targetRow);
                 selectedPiece.setTile(targetTile);
                 playerTurn.setNextTurn();
             }
@@ -256,13 +256,13 @@ public class CreateChessOpening extends ChessScene {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[7][2].setChessPiece(selectedPiece);
                     chessGrid[7][3].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 2, targetRow);
-                    chessBoard.add(targetPiece, 3, targetRow);
+                    chessBoard.add(selectedPiece, 3, targetRow);
+                    chessBoard.add(targetPiece, 4, targetRow);
                 } else {
                     chessGrid[0][5].setChessPiece(selectedPiece);
                     chessGrid[0][4].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 5, targetRow);
-                    chessBoard.add(targetPiece, 4, targetRow);
+                    chessBoard.add(selectedPiece, 6, targetRow);
+                    chessBoard.add(targetPiece, 5, targetRow);
                 }
                 ((King) selectedPiece).setLongCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 2));
@@ -271,13 +271,13 @@ public class CreateChessOpening extends ChessScene {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[7][6].setChessPiece(selectedPiece);
                     chessGrid[7][5].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 6, targetRow);
-                    chessBoard.add(targetPiece, 5, targetRow);
+                    chessBoard.add(selectedPiece, 7, targetRow);
+                    chessBoard.add(targetPiece, 6, targetRow);
                 } else {
                     chessGrid[0][1].setChessPiece(selectedPiece);
                     chessGrid[0][2].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 1, targetRow);
-                    chessBoard.add(targetPiece, 2, targetRow);
+                    chessBoard.add(selectedPiece, 2, targetRow);
+                    chessBoard.add(targetPiece, 3, targetRow);
                 }
                 ((King) selectedPiece).setShortCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(7, 6));
@@ -289,13 +289,13 @@ public class CreateChessOpening extends ChessScene {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[0][2].setChessPiece(selectedPiece);
                     chessGrid[0][3].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 2, targetRow);
-                    chessBoard.add(targetPiece, 3, targetRow);
+                    chessBoard.add(selectedPiece, 3, targetRow);
+                    chessBoard.add(targetPiece, 4, targetRow);
                 } else {
                     chessGrid[7][5].setChessPiece(selectedPiece);
                     chessGrid[7][4].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 5, targetRow);
-                    chessBoard.add(targetPiece, 4, targetRow);
+                    chessBoard.add(selectedPiece, 6, targetRow);
+                    chessBoard.add(targetPiece, 5, targetRow);
                 }
                 ((King) selectedPiece).setLongCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(0, 2));
@@ -304,13 +304,13 @@ public class CreateChessOpening extends ChessScene {
                 if (!chessBoard.getFlipped()) {
                     chessGrid[0][6].setChessPiece(selectedPiece);
                     chessGrid[0][5].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 6, targetRow);
-                    chessBoard.add(targetPiece, 5, targetRow);
+                    chessBoard.add(selectedPiece, 7, targetRow);
+                    chessBoard.add(targetPiece, 6, targetRow);
                 } else {
                     chessGrid[7][1].setChessPiece(selectedPiece);
                     chessGrid[7][2].setChessPiece(targetPiece);
-                    chessBoard.add(selectedPiece, 1, targetRow);
-                    chessBoard.add(targetPiece, 2, targetRow);
+                    chessBoard.add(selectedPiece, 2, targetRow);
+                    chessBoard.add(targetPiece, 3, targetRow);
                 }
                 ((King) selectedPiece).setShortCastled(true);
                 selectedPiece.setTile(chessBoard.getChessGridTileByName(0, 6));
