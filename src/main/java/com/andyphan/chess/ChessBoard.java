@@ -20,42 +20,29 @@ public class ChessBoard extends GridPane {
 
     protected void drawBoard() {
         for (int row = 0; row < BOARD_SIZE; row++) {
+            // Draw row labels (1-8) on the left side of the board
+            Text rowLabel = new Text(isFlipped ? String.valueOf(row + 1) : String.valueOf(8 - row));
+            rowLabel.setFont(new Font(15));
+            rowLabel.setStyle("-fx-font-weight: bold");
+            StackPane rowPane = new StackPane(rowLabel);
+            rowPane.setMinSize(20, 20);
+            rowPane.setAlignment(Pos.CENTER);
+            add(rowPane, 0, row); // Add row labels in the first column (index 0)
+
             for (int col = 0; col < BOARD_SIZE; col++) {
-                drawSquare(row, col, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
+                // Draw squares starting from the second column (index 1)
+                drawSquare(row, col + 1, (row + col) % 2 == 0 ? Color.rgb(215, 215, 215) : Color.rgb(123, 124, 124));
                 chessGrid[row][col] = new Tile(row, col);
-                if (isFlipped) {
-                    Text colLabel = new Text(String.valueOf((char) ('h' - col)));
+
+                if (row == 0) {
+                    // Draw column labels (a-h) on the bottom of the board
+                    Text colLabel = new Text(isFlipped ? String.valueOf((char) ('h' - col)) : String.valueOf((char) ('a' + col)));
                     colLabel.setFont(new Font(15));
                     colLabel.setStyle("-fx-font-weight: bold");
                     StackPane colPane = new StackPane(colLabel);
                     colPane.setMinSize(20, 20);
                     colPane.setAlignment(Pos.CENTER);
-                    add(colPane, col, 8);
-
-                    Text rowLabel = new Text(String.valueOf(row + 1));
-                    rowLabel.setFont(new Font(15));
-                    rowLabel.setStyle("-fx-font-weight: bold");
-                    StackPane rowPane = new StackPane(rowLabel);
-                    rowPane.setMinSize(20, 20);
-                    rowPane.setAlignment(Pos.CENTER);
-                    add(rowPane, 9, row);
-                }
-                else {
-                    Text colLabel = new Text(String.valueOf((char) ('a' + col)));
-                    colLabel.setFont(new Font(15));
-                    colLabel.setStyle("-fx-font-weight: bold");
-                    StackPane colPane = new StackPane(colLabel);
-                    colPane.setMinSize(20, 20);
-                    colPane.setAlignment(Pos.CENTER);
-                    add(colPane, col, 8);
-
-                    Text rowLabel = new Text(String.valueOf(8 - row));
-                    rowLabel.setFont(new Font(15));
-                    rowLabel.setStyle("-fx-font-weight: bold");
-                    StackPane rowPane = new StackPane(rowLabel);
-                    rowPane.setMinSize(20, 20);
-                    rowPane.setAlignment(Pos.CENTER);
-                    add(rowPane, 9, row);
+                    add(colPane, col + 1, 8); // Add column labels in the corresponding column
                 }
             }
         }
