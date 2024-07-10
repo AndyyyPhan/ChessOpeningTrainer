@@ -11,10 +11,10 @@
         <property name="hibernate.hbm2ddl.auto" >update</property>
         <property name="hibernate.jdbc.use_get_generated_keys">false</property>
 
-        <mapping class="com.andyphan.chessopeningtrainer.User" />
-        <mapping class="com.andyphan.chessopeningtrainer.ChessOpening" />
+        <mapping class="com.andyphan.database.User" />
+        <mapping class="com.andyphan.database.ChessOpening" />
         <mapping class="com.andyphan.chessopeningtrainer.ActiveChessOpening" />
-        <mapping class="com.andyphan.chessopeningtrainer.UserChessOpening" />
+        <mapping class="com.andyphan.database.UserChessOpening" />
 
     </session-factory>
 </hibernate-configuration>

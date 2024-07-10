@@ -1,4 +1,4 @@
-package com.andyphan.chessopeningtrainer;
+package com.andyphan.database;
 
 public class UserManager {
     private static User currentUser;

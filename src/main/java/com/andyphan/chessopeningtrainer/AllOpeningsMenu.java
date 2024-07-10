@@ -1,6 +1,9 @@
 package com.andyphan.chessopeningtrainer;
 
 import com.andyphan.chess.ChessScene;
+import com.andyphan.database.ChessOpening;
+import com.andyphan.database.ChessOpeningsParser;
+import com.andyphan.database.DatabaseManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.List;

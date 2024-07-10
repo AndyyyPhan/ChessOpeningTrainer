@@ -1,6 +1,9 @@
 package com.andyphan.chessopeningtrainer;
 
 import com.andyphan.chess.ChessScene;
+import com.andyphan.database.ChessOpening;
+import com.andyphan.database.DatabaseManager;
+import com.andyphan.database.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

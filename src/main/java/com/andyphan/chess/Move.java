@@ -1,6 +1,6 @@
 package com.andyphan.chess;
 
-import com.andyphan.chessopeningtrainer.ChessOpening;
+import com.andyphan.database.ChessOpening;
 
 public class Move {
     private ChessOpening chessOpening;

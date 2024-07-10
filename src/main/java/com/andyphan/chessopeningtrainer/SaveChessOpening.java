@@ -1,5 +1,7 @@
 package com.andyphan.chessopeningtrainer;
 
+import com.andyphan.database.ChessOpening;
+import com.andyphan.database.DatabaseManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,8 +12,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class SaveChessOpening extends Scene {
     private DatabaseManager database = new DatabaseManager();

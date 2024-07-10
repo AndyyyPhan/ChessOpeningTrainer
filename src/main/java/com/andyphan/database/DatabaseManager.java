@@ -1,5 +1,6 @@
-package com.andyphan.chessopeningtrainer;
+package com.andyphan.database;
 
+import com.andyphan.chessopeningtrainer.ActiveChessOpening;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

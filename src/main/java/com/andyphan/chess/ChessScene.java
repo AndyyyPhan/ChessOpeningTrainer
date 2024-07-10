@@ -1,7 +1,7 @@
 package com.andyphan.chess;
 
 import com.andyphan.chess.pieces.*;
-import com.andyphan.chessopeningtrainer.ChessOpening;
+import com.andyphan.database.ChessOpening;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;

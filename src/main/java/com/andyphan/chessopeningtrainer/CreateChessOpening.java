@@ -4,6 +4,7 @@ import com.andyphan.chess.Alliance;
 import com.andyphan.chess.ChessPiece;
 import com.andyphan.chess.ChessScene;
 import com.andyphan.chess.pieces.*;
+import com.andyphan.database.ChessOpening;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Alert;

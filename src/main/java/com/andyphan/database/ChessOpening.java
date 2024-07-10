@@ -1,4 +1,4 @@
-package com.andyphan.chessopeningtrainer;
+package com.andyphan.database;
 
 import jakarta.persistence.*;
 

@@ -1,5 +1,6 @@
-package com.andyphan.chessopeningtrainer;
+package com.andyphan.database;
 
+import com.andyphan.database.ChessOpening;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

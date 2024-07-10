@@ -1,5 +1,8 @@
 package com.andyphan.chessopeningtrainer;
 
+import com.andyphan.database.DatabaseManager;
+import com.andyphan.database.User;
+import com.andyphan.database.UserManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

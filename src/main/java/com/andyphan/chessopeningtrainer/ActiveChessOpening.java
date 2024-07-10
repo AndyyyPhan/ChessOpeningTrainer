@@ -1,5 +1,7 @@
 package com.andyphan.chessopeningtrainer;
 
+import com.andyphan.database.ChessOpening;
+import com.andyphan.database.User;
 import jakarta.persistence.*;
 
 @Entity

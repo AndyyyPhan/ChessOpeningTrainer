@@ -1,4 +1,4 @@
-package com.andyphan.chessopeningtrainer;
+package com.andyphan.database;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
