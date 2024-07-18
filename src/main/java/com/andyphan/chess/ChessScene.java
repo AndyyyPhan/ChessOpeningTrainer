@@ -1,13 +1,18 @@
 package com.andyphan.chess;
 
 import com.andyphan.chess.pieces.*;
+import com.andyphan.chessopeningtrainer.MovePair;
+import com.andyphan.chessopeningtrainer.MovesTable;
 import com.andyphan.database.ChessOpening;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -20,6 +25,9 @@ import static com.andyphan.chess.ChessBoard.TILE_SIZE;
 public class ChessScene extends Scene {
     protected final VBox layout = (VBox) getRoot();
     protected final ChessBoard chessBoard = new ChessBoard();
+    protected final MovesTable movesTable = new MovesTable();
+    private ObservableList<MovePair> moveData = FXCollections.observableArrayList();
+    protected final HBox chessContainer = new HBox(10, chessBoard, movesTable);
     protected Tile[][] chessGrid = chessBoard.getChessGrid();
     protected final Tile selectedTile = new Tile(-1, -1);
     protected Tile targetTile = new Tile(-1, -1);
@@ -28,15 +36,16 @@ public class ChessScene extends Scene {
     protected ChessPiece selectedPiece;
     protected ChessPiece targetPiece;
     protected final Turn playerTurn = new Turn();
-    private final Move move;
+    private final Move chessOpeningMoves;
     protected Button flipBoardButton = new Button("Flip Board");
     protected Button showAllMovesButton = new Button("Show All Moves");
     public ChessScene(ChessOpening chessOpening) {
-        super(new VBox(10), BOARD_SIZE * TILE_SIZE + 50, BOARD_SIZE * TILE_SIZE + 100);
-        layout.getChildren().add(chessBoard);
-        move = new Move(chessOpening);
+        super(new VBox(10), BOARD_SIZE * TILE_SIZE + 300, BOARD_SIZE * TILE_SIZE + 100);
+        layout.getChildren().add(chessContainer);
+        chessOpeningMoves = new Move(chessOpening);
         initializePieces();
         initializeButtons();
+        handleTableMoves();
 
 
         chessBoard.setOnMouseClicked(event -> {
@@ -278,8 +287,8 @@ public class ChessScene extends Scene {
         Duration moveDuration = Duration.seconds(1);
         ArrayList<String> singleMove = new ArrayList<>();
 
-        for (int i = 0; i < move.getAllMovesInList().length; i++) {
-            String movePair = move.getAllMovesInList()[i].trim();
+        for (int i = 0; i < chessOpeningMoves.getAllMovesInList().length; i++) {
+            String movePair = chessOpeningMoves.getAllMovesInList()[i].trim();
             String[] individualMove = movePair.split(" ");
 
             singleMove.addAll(Arrays.asList(individualMove));
@@ -519,5 +528,16 @@ public class ChessScene extends Scene {
             selectPiece(7 - movingTile.getCol(), 7 - movingTile.getRow());
             movePiece(7 - moveTile.getCol(), 7 - moveTile.getRow());
         }
+    }
+
+    protected void handleTableMoves() {
+        for (int i = 0; i < chessOpeningMoves.getAllMovesInList().length; i++) {
+            String movePair = chessOpeningMoves.getAllMovesInList()[i].trim();
+            String[] individualMove = movePair.split(" ");
+            if (individualMove.length == 2) moveData.add(new MovePair(individualMove[0], individualMove[1]));
+            else moveData.add(new MovePair(individualMove[0], ""));
+        }
+        movesTable.getTableView().setItems(moveData);
+        movesTable.getTableView().refresh();
     }
 }
