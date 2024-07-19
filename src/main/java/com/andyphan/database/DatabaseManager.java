@@ -298,10 +298,7 @@ public class DatabaseManager {
             User user = query.getSingleResult();
             if (user != null) {
                 UserManager.setCurrentUser(user);
-                System.out.println("User logged in: " + user.getUsername());
                 session.getTransaction().commit();
-            } else {
-                System.out.println("Invalid login credentials.");
             }
         } catch (Exception e) {
             e.printStackTrace();
