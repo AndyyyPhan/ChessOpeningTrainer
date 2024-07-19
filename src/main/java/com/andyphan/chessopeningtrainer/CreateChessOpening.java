@@ -68,6 +68,12 @@ public class CreateChessOpening extends ChessScene {
     }
 
     @Override
+    protected void initializeMovesTable() {
+        movesTable.getTableView().setItems(moveData);
+        movesTable.getTableView().refresh();
+    }
+
+    @Override
     protected void displayAllMoves() {
         if (this.moves == null || this.moves.isBlank()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -223,7 +229,16 @@ public class CreateChessOpening extends ChessScene {
                 stringBuilder.append("+").append(" ");
             }
             moves = stringBuilder.toString().trim();
+
+            if (playerTurn.getCurrentTurn() == Alliance.BLACK) {
+                moveData.add(new MovePair(getLastPair()[0], ""));
+            }
+            else {
+                moveData.get(moveData.size() - 1).setBlackMove(getLastPair()[1]);
+            }
+            movesTable.getTableView().refresh();
         }
+
         firstHalf.setLength(0);
     }
 
@@ -320,5 +335,14 @@ public class CreateChessOpening extends ChessScene {
         ((King) selectedPiece).setHasMoved(true);
         ((Rook) targetPiece).setHasMoved(true);
         playerTurn.setNextTurn();
+    }
+
+    private String[] getLastPair() {
+        int lastIndex = moves.length() - 1;
+        while (moves.charAt(lastIndex) != '.') {
+            lastIndex --;
+        }
+        String lastPair = moves.substring(lastIndex + 1);
+        return lastPair.trim().split(" ");
     }
 }
