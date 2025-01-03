@@ -65,14 +65,15 @@ public class ChessBoard extends GridPane {
         return chessGrid;
     }
     public void setFlippedChessGrid(Tile[][] chessGrid) {
-        int rows = chessGrid.length;
-        int cols = chessGrid[0].length;
+        Tile[][] flippedGrid = new Tile[BOARD_SIZE][BOARD_SIZE];
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                this.chessGrid[row][col].setEqualToTile(chessGrid[7-row][7-col]);
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                flippedGrid[row][col] = chessGrid[BOARD_SIZE - 1 - row][BOARD_SIZE - 1 - col];
             }
         }
+
+        this.chessGrid = flippedGrid;
     }
     public void setChessGrid(Tile[][] chessGrid) {
         this.chessGrid = chessGrid;

@@ -125,6 +125,10 @@ public class CreateChessOpening extends ChessScene {
 
     @Override
     protected void selectPiece(int col, int row) {
+        if (chessBoard.getFlipped()) {
+            col = BOARD_SIZE - 1 - col;
+            row = BOARD_SIZE - 1 - row;
+        }
         selectedPiece = chessGrid[row][col].getChessPiece();
         if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(row, col);
@@ -135,8 +139,14 @@ public class CreateChessOpening extends ChessScene {
         }
     }
 
+    // NEED TO FIX:
+    // FLIPPED BOARD DOES NOT SHOW CORRECT MOVES
     @Override
     protected void movePiece(int targetCol, int targetRow) {
+        if (chessBoard.getFlipped()) {
+            targetCol = BOARD_SIZE - 1 - targetCol;
+            targetRow = BOARD_SIZE - 1 - targetRow;
+        }
         selectedPiece = selectedTile.getChessPiece();
         targetTile = chessGrid[targetRow][targetCol];
         targetPiece = targetTile.getChessPiece();

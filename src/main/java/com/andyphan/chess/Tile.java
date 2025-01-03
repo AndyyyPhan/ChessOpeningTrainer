@@ -17,40 +17,52 @@ public class Tile {
     }
 
     public void setTileName(String tileName) {
-        if (tileName.length() > 3 && !tileName.equals("O-O-O")) {
-            String substring = tileName.substring(tileName.length() - 2);
-            this.tileName = substring;
-            translateToNumbers(substring);
+//        if (tileName.length() > 3 && !tileName.equals("O-O-O")) {
+//            String substring = tileName.substring(tileName.length() - 2);
+//            this.tileName = substring;
+//            translateToNumbers(substring);
+//        }
+//        else if (!tileName.equals("O-O") && tileName.length() <= 3) translateToNumbers(tileName);
+//        else {
+//            this.tileName = tileName;
+//            row = 0;
+//            col = 0;
+//        }
+        translateToNumbers(tileName);
+    }
+
+    public void setTileName(String tileName, boolean isFlipped) {
+        if (isFlipped) {
+            col = 7 - (tileName.charAt(0) - 'a');
+            row = 7 - (8 - Character.getNumericValue(tileName.charAt(1)));
+            translateToTile(row, col);
         }
-        else if (!tileName.equals("O-O") && tileName.length() <= 3) translateToNumbers(tileName);
-        else {
-            this.tileName = tileName;
-            row = 0;
-            col = 0;
-        }
+        else setTileName(tileName);
     }
 
     private void translateToNumbers(String tileName) {
-        HashMap<Character, Integer> columns = new HashMap<>();
-        columns.put('a', 0);
-        columns.put('b', 1);
-        columns.put('c', 2);
-        columns.put('d', 3);
-        columns.put('e', 4);
-        columns.put('f', 5);
-        columns.put('g', 6);
-        columns.put('h', 7);
-        if (!tileName.contains("x")) {
-            if (tileName.length() > 2) tileName = tileName.substring(1);
-            Character letter = tileName.charAt(0);
-            col = columns.get(letter);
-            row = 8 - Integer.parseInt(String.valueOf(tileName.charAt(1)));
-        }
-        else {
-            Character letter = tileName.charAt(0);
-            col = columns.get(letter);
-            row = 0;
-        }
+        col = tileName.charAt(0) - 'a';
+        row = 8 - Character.getNumericValue(tileName.charAt(1));
+//        HashMap<Character, Integer> columns = new HashMap<>();
+//        columns.put('a', 0);
+//        columns.put('b', 1);
+//        columns.put('c', 2);
+//        columns.put('d', 3);
+//        columns.put('e', 4);
+//        columns.put('f', 5);
+//        columns.put('g', 6);
+//        columns.put('h', 7);
+//        if (!tileName.contains("x")) {
+//            if (tileName.length() > 2) tileName = tileName.substring(1);
+//            Character letter = tileName.charAt(0);
+//            col = columns.get(letter);
+//            row = 8 - Integer.parseInt(String.valueOf(tileName.charAt(1)));
+//        }
+//        else {
+//            Character letter = tileName.charAt(0);
+//            col = columns.get(letter);
+//            row = 0;
+//        }
     }
 
     public int translateColToNumber(Character letter) {
@@ -67,28 +79,51 @@ public class Tile {
     }
 
     private void translateToTile(int row, int col) {
-        HashMap<Integer, Character> columns = new HashMap<>();
-        columns.put(0, 'a');
-        columns.put(1, 'b');
-        columns.put(2, 'c');
-        columns.put(3, 'd');
-        columns.put(4, 'e');
-        columns.put(5, 'f');
-        columns.put(6, 'g');
-        columns.put(7, 'h');
-        tileName = String.valueOf(columns.get(col)) +
-                (8 - row);
+        tileName = String.valueOf((char) ('a' + col)) + (8 - row);
+
+//        HashMap<Integer, Character> columns = new HashMap<>();
+//        columns.put(0, 'a');
+//        columns.put(1, 'b');
+//        columns.put(2, 'c');
+//        columns.put(3, 'd');
+//        columns.put(4, 'e');
+//        columns.put(5, 'f');
+//        columns.put(6, 'g');
+//        columns.put(7, 'h');
+//        tileName = String.valueOf(columns.get(col)) +
+//                (8 - row);
     }
+
+    public String getTileName() {
+        return tileName;
+    }
+
+    public String getTileName(boolean isFlipped) {
+        if (!isFlipped) return tileName;
+
+        int flippedRow = 1 + row;
+        char flippedCol = (char) ('a' + (7 - col));
+        return String.valueOf(flippedCol) + flippedRow;
+    }
+
+    public int flipRow() {
+        return 7 - this.row;
+    }
+
+    public int flipCol() {
+        return 7 - this.col;
+    }
+
     public void setChessPiece(ChessPiece chessPiece) {
         this.chessPiece = chessPiece;
-        setOccupied(true);
+        setOccupied(chessPiece != null);
     }
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
     public int getRow() {
-        return row;
+        return this.row;
     }
     public int getCol() {
         return col;
@@ -96,21 +131,10 @@ public class Tile {
     public ChessPiece getChessPiece() {
         return chessPiece;
     }
-    public String getTileName() {
-        return tileName;
-    }
     public void setRowAndCol(int row, int col) {
         this.row = row;
         this.col = col;
         translateToTile(row, col);
-    }
-
-    public void setEqualToTile(Tile tile) {
-        this.chessPiece = tile.chessPiece;
-        this.occupied = tile.occupied;
-        this.tileName = tile.tileName;
-        this.row = tile.row;
-        this.col = tile.col;
     }
 
     public void resetTile() {

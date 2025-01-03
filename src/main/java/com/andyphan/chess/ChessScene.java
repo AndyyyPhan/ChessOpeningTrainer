@@ -26,7 +26,7 @@ public class ChessScene extends Scene {
     protected final VBox layout = (VBox) getRoot();
     protected final ChessBoard chessBoard = new ChessBoard();
     protected final MovesTable movesTable = new MovesTable();
-    private ObservableList<MovePair> moveData = FXCollections.observableArrayList();
+    protected ObservableList<MovePair> moveData = FXCollections.observableArrayList();
     protected final HBox chessContainer = new HBox(10, chessBoard, movesTable);
     protected Tile[][] chessGrid = chessBoard.getChessGrid();
     protected final Tile selectedTile = new Tile(-1, -1);
@@ -45,7 +45,7 @@ public class ChessScene extends Scene {
         chessOpeningMoves = new Move(chessOpening);
         initializePieces();
         initializeButtons();
-        handleTableMoves();
+        initializeMovesTable();
 
 
         chessBoard.setOnMouseClicked(event -> {
@@ -58,6 +58,10 @@ public class ChessScene extends Scene {
     }
 
     private void handleMouseClick(int clickedCol, int clickedRow) {
+        if (chessBoard.getFlipped()) {
+            clickedCol = BOARD_SIZE - 1 - clickedCol;
+            clickedRow = BOARD_SIZE - 1 - clickedRow;
+        }
         if (selectedTile.getRow() == -1 && selectedTile.getCol() == -1) {
             selectPiece(clickedCol, clickedRow);
         }
@@ -67,16 +71,24 @@ public class ChessScene extends Scene {
     }
 
     protected void selectPiece(int col, int row) {
+        if (chessBoard.getFlipped()) {
+            col = BOARD_SIZE - 1 - col;
+            row = BOARD_SIZE - 1 - row;
+        }
         selectedPiece = chessGrid[row][col].getChessPiece();
         if (selectedPiece != null && playerTurn.getCurrentTurn() == selectedPiece.getAlliance()) {
             selectedTile.setRowAndCol(row, col);
             selectedTile.setChessPiece(chessGrid[row][col].getChessPiece());
-            selectedRow = row;
             selectedCol = col;
+            selectedRow = row;
         }
     }
 
     protected void movePiece(int targetCol, int targetRow) {
+        if (chessBoard.getFlipped()) {
+            targetCol = BOARD_SIZE - 1 - targetCol;
+            targetRow = BOARD_SIZE - 1 - targetRow;
+        }
         selectedPiece = selectedTile.getChessPiece();
         targetTile = chessGrid[targetRow][targetCol];
         targetPiece = targetTile.getChessPiece();
@@ -241,20 +253,18 @@ public class ChessScene extends Scene {
     }
 
     private void flipBoard() {
-        Tile[][] chessGridCopy = new Tile[BOARD_SIZE][BOARD_SIZE];
-        int rows = chessGrid.length;
-        int cols = chessGrid[0].length;
+        Tile[][] flippedGrid = new Tile[BOARD_SIZE][BOARD_SIZE];
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                chessGridCopy[row][col] = new Tile(row,col);
-                chessGridCopy[row][col].setEqualToTile(chessGrid[row][col]);
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                flippedGrid[row][col] = chessGrid[BOARD_SIZE - 1 - row][BOARD_SIZE - 1 - col];
             }
         }
         chessBoard.getChildren().clear();
         chessBoard.setFlipped(!chessBoard.getFlipped());
         chessBoard.drawBoard();
-        chessBoard.setFlippedChessGrid(chessGridCopy);
+        chessBoard.setFlippedChessGrid(flippedGrid);
+        chessGrid = flippedGrid;
         setupPieces();
         selectedTile.resetTile();
     }
@@ -530,7 +540,7 @@ public class ChessScene extends Scene {
         }
     }
 
-    protected void handleTableMoves() {
+    protected void initializeMovesTable() {
         for (int i = 0; i < chessOpeningMoves.getAllMovesInList().length; i++) {
             String movePair = chessOpeningMoves.getAllMovesInList()[i].trim();
             String[] individualMove = movePair.split(" ");
