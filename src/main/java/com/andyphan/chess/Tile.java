@@ -80,18 +80,6 @@ public class Tile {
 
     private void translateToTile(int row, int col) {
         tileName = String.valueOf((char) ('a' + col)) + (8 - row);
-
-//        HashMap<Integer, Character> columns = new HashMap<>();
-//        columns.put(0, 'a');
-//        columns.put(1, 'b');
-//        columns.put(2, 'c');
-//        columns.put(3, 'd');
-//        columns.put(4, 'e');
-//        columns.put(5, 'f');
-//        columns.put(6, 'g');
-//        columns.put(7, 'h');
-//        tileName = String.valueOf(columns.get(col)) +
-//                (8 - row);
     }
 
     public String getTileName() {
