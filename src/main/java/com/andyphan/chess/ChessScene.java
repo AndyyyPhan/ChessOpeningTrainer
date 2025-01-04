@@ -321,10 +321,10 @@ public class ChessScene extends Scene {
 
     protected void playMove(String move) {
         if (move.contains("+")) move = move.substring(0, move.length()-1);
-        Tile moveTile = new Tile(move);
-        moveTile = chessBoard.getChessGridTileByName(moveTile.getRow(), moveTile.getCol());
+        Tile moveTile = new Tile(-1, -1);
         Tile movingTile = new Tile(-1, -1);
         if (move.length() == 2) {
+            moveTile = chessBoard.getChessGridTileByName(moveTile.getRow(), moveTile.getCol());
             for (int row=0; row<BOARD_SIZE; row++) {
                 if (chessBoard.getChessGridTileByName(row, moveTile.getCol()).getChessPiece() != null) {
                     if (chessBoard.getChessGridTileByName(row, moveTile.getCol()).getChessPiece().getClass() == Pawn.class &&
@@ -334,53 +334,13 @@ public class ChessScene extends Scene {
                 }
             }
         }
-        else if (move.contains("N") && move.length() == 3) {
-            for (int row=0; row<BOARD_SIZE; row++) {
-                for (int col=0; col<BOARD_SIZE; col++) {
-                    if (chessBoard.getChessGridTileByName(row, col).getChessPiece() != null) {
-                        if (chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Knight.class &&
-                        chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
-                        && chessBoard.getChessGridTileByName(row, col).getChessPiece().isValidMove(moveTile))
-                            movingTile = chessBoard.getChessGridTileByName(row, col);
-                    }
-                }
-            }
-        }
-        else if (move.contains("B") && move.length() == 3) {
-            for (int row=0; row<BOARD_SIZE; row++) {
-                for (int col=0; col<BOARD_SIZE; col++) {
-                    if (chessBoard.getChessGridTileByName(row, col).getChessPiece() != null) {
-                        if (chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Bishop.class &&
-                                chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
-                                && chessBoard.getChessGridTileByName(row, col).getChessPiece().isValidMove(moveTile))
-                            movingTile = chessBoard.getChessGridTileByName(row, col);
-                    }
-                }
-            }
-        }
-        else if (move.contains("R") && move.length() == 3) {
-            for (int row=0; row<BOARD_SIZE; row++) {
-                for (int col=0; col<BOARD_SIZE; col++) {
-                    if (chessBoard.getChessGridTileByName(row, col).getChessPiece() != null) {
-                        if (chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Rook.class &&
-                                chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
-                                && chessBoard.getChessGridTileByName(row, col).getChessPiece().isValidMove(moveTile))
-                            movingTile = chessBoard.getChessGridTileByName(row, col);
-                    }
-                }
-            }
-        }
-        else if (move.contains("Q") && move.length() == 3) {
-            for (int row=0; row<BOARD_SIZE; row++) {
-                for (int col=0; col<BOARD_SIZE; col++) {
-                    if (chessBoard.getChessGridTileByName(row, col).getChessPiece() != null) {
-                        if (chessBoard.getChessGridTileByName(row, col).getChessPiece().getClass() == Queen.class &&
-                                chessBoard.getChessGridTileByName(row, col).getChessPiece().getAlliance() == playerTurn.getCurrentTurn()
-                                && chessBoard.getChessGridTileByName(row, col).getChessPiece().isValidMove(moveTile))
-                            movingTile = chessBoard.getChessGridTileByName(row, col);
-                    }
-                }
-            }
+        else if (move.length() == 3) {
+            move = move.substring(1);
+            moveTile = chessBoard.getChessGridTileByName(moveTile.getRow(), moveTile.getCol());
+            if (move.contains("N")) movingTile = findPieceTile(Knight.class, playerTurn.getCurrentTurn(), moveTile);
+            else if (move.contains("B")) movingTile = findPieceTile(Bishop.class, playerTurn.getCurrentTurn(), moveTile);
+            else if (move.contains("R")) movingTile = findPieceTile(Rook.class, playerTurn.getCurrentTurn(), moveTile);
+            else if (move.contains("Q")) movingTile = findPieceTile(Queen.class, playerTurn.getCurrentTurn(), moveTile);
         }
         else if (move.contains("x")) {
             String takingOn = move.substring(move.length()-2);
@@ -539,6 +499,20 @@ public class ChessScene extends Scene {
             movePiece(7 - moveTile.getCol(), 7 - moveTile.getRow());
         }
     }
+
+    public Tile findPieceTile(Class<? extends ChessPiece> pieceClass, Alliance alliance, Tile targetTile) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                ChessPiece piece = chessBoard.getChessGridTile(row, col).getChessPiece();
+                if (piece != null && piece.getClass() == pieceClass && piece.getAlliance() == alliance
+                        && piece.isValidMove(targetTile)) {
+                    return chessBoard.getChessGridTile(row, col);
+                }
+            }
+        }
+        return null;
+    }
+
 
     protected void initializeMovesTable() {
         for (int i = 0; i < chessOpeningMoves.getAllMovesInList().length; i++) {
