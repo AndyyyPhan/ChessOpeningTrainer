@@ -17,18 +17,8 @@ public class Tile {
     }
 
     public void setTileName(String tileName) {
-//        if (tileName.length() > 3 && !tileName.equals("O-O-O")) {
-//            String substring = tileName.substring(tileName.length() - 2);
-//            this.tileName = substring;
-//            translateToNumbers(substring);
-//        }
-//        else if (!tileName.equals("O-O") && tileName.length() <= 3) translateToNumbers(tileName);
-//        else {
-//            this.tileName = tileName;
-//            row = 0;
-//            col = 0;
-//        }
         translateToNumbers(tileName);
+        this.tileName = tileName;
     }
 
     public void setTileName(String tileName, boolean isFlipped) {
@@ -41,28 +31,14 @@ public class Tile {
     }
 
     private void translateToNumbers(String tileName) {
-        col = tileName.charAt(0) - 'a';
-        row = 8 - Character.getNumericValue(tileName.charAt(1));
-//        HashMap<Character, Integer> columns = new HashMap<>();
-//        columns.put('a', 0);
-//        columns.put('b', 1);
-//        columns.put('c', 2);
-//        columns.put('d', 3);
-//        columns.put('e', 4);
-//        columns.put('f', 5);
-//        columns.put('g', 6);
-//        columns.put('h', 7);
-//        if (!tileName.contains("x")) {
-//            if (tileName.length() > 2) tileName = tileName.substring(1);
-//            Character letter = tileName.charAt(0);
-//            col = columns.get(letter);
-//            row = 8 - Integer.parseInt(String.valueOf(tileName.charAt(1)));
-//        }
-//        else {
-//            Character letter = tileName.charAt(0);
-//            col = columns.get(letter);
-//            row = 0;
-//        }
+        if (tileName.length() == 2) {
+            this.col = tileName.charAt(0) - 'a';
+            this.row = 8 - Character.getNumericValue(tileName.charAt(1));
+        }
+        else if (tileName.length() == 3) {
+            this.col = tileName.charAt(1) - 'a';
+            this.row = 8 - Character.getNumericValue(tileName.charAt(2));
+        }
     }
 
     public int translateColToNumber(Character letter) {
