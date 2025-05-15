@@ -433,15 +433,8 @@ public class ChessScene extends Scene {
                 }
             }
         }
-
-        if (!chessBoard.getFlipped()) {
-            selectPiece(movingTile.getCol(), movingTile.getRow());
-            movePiece(moveTile.getCol(), moveTile.getRow());
-        }
-        else {
-            selectPiece(7 - movingTile.getCol(), 7 - movingTile.getRow());
-            movePiece(7 - moveTile.getCol(), 7 - moveTile.getRow());
-        }
+        selectPiece(movingTile.getCol(), movingTile.getRow());
+        movePiece(moveTile.getCol(), moveTile.getRow());
     }
 
     public Tile findPieceTile(Class<? extends ChessPiece> pieceClass, Alliance alliance, Tile targetTile) {
