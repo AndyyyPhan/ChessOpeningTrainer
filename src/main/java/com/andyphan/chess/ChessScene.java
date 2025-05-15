@@ -307,7 +307,12 @@ public class ChessScene extends Scene {
             int finalI = i;
             KeyFrame keyFrame = new KeyFrame(
                     moveDuration.multiply(i),
-                    event -> playMove(singleMove.get(finalI))
+                    event -> {
+                        int moveIndex = finalI / 2;
+                        boolean isWhiteMove = (finalI % 2 == 0);
+                        movesTable.highlightRow(moveIndex, isWhiteMove);
+                        playMove(singleMove.get(finalI));
+                    }
             );
             timeline.getKeyFrames().add(keyFrame);
         }

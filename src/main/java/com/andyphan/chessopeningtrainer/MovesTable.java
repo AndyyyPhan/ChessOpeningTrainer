@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 
 public class MovesTable extends VBox {
     private TableView<MovePair> tableView;
+    private int highlightedRow = -1;
+    private boolean highlightWhiteMove = true;
 
     public MovesTable() {
         tableView = new TableView<>();
@@ -20,11 +22,8 @@ public class MovesTable extends VBox {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                    } else {
-                        setText(String.valueOf(getIndex() + 1));
-                    }
+                    if (empty) setText(null);
+                    else setText(String.valueOf(getIndex() + 1));
                 }
             };
         });
@@ -48,10 +47,37 @@ public class MovesTable extends VBox {
 
         tableView.getColumns().addAll(moveNumberColumn, whiteColumn, blackColumn);
         getChildren().add(tableView);
+
+        whiteColumn.setCellFactory(column -> new TableCell<MovePair, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item);
+                if (!empty && getIndex() == highlightedRow && highlightWhiteMove) setStyle("-fx-background-color: yellow;");
+                else setStyle("");
+            }
+        });
+
+        blackColumn.setCellFactory(column -> new TableCell<MovePair, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null: item);
+                if (!empty && getIndex() == highlightedRow && !highlightWhiteMove) setStyle("-fx-background-color: yellow;");
+                else setStyle("");
+            }
+        });
     }
 
     public TableView<MovePair> getTableView() {
         return this.tableView;
+    }
+
+    public void highlightRow(int rowIndex, boolean isWhiteMove) {
+        this.highlightedRow = rowIndex;
+        this.highlightWhiteMove = isWhiteMove;
+        tableView.scrollTo(rowIndex);
+        tableView.refresh();
     }
 
 }
